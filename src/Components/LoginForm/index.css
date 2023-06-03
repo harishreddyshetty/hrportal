@@ -1,4 +1,3 @@
-
 .err-msg-display{
     color: red;
     font-size: 14px;
@@ -7,7 +6,8 @@
 .login-page-container{
     min-width: 375px;
     height: 100vh;
-
+    display: flex;
+    align-items: center;
 }
 
 .login-button{
@@ -24,6 +24,19 @@ cursor: pointer;
 
 }
 
+
+.login-card{
+    background-color: white;
+    border-radius: 5px;
+    width:400px;
+    box-shadow: 0px 0px 2px 2px lightgray;
+    height:450px;
+    margin-left: 10%;
+    padding: 20px;
+
+
+
+}
 
 
 
@@ -42,7 +55,9 @@ cursor: pointer;
     }
     .login-page-container{
         width:100vw;
-       
+       display: flex;
+       align-items: center;
+       justify-content: center;
     }
 
 }
@@ -58,18 +73,7 @@ input::placeholder{
 .box-shadow {
     box-shadow: 0 22px 18px rgba(0, 0, 0, 2);
   }
-.login-card{
-    background-color: white;
-    border-radius: 5px;
-    width:400px;
-    box-shadow: 0px 0px 2px 2px lightgray;
-    height:450px;
-    margin-left: 10%;
-    padding: 20px;
 
-
-
-}
 
 
 .login-page-image{
@@ -77,21 +81,28 @@ input::placeholder{
     height: 80%;
     background-color: transparent;
     
+    
 }
 
 
 
-@media screen and (min-width:768px){
+@media screen and (min-width:768px) and (max-width:1000px){
     .login-card{
        margin-left: 5% ;
        margin-right: 10%;
+       flex-shrink: 1;
+       flex-grow: 0;
+
     }
     .login-page-image{
-       width:50%;
+       width:40%;
        height:auto;
     }
+   
     
 }
+
+
 
 
 .company-logo{

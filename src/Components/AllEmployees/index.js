@@ -1,19 +1,32 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Vortex } from "react-loader-spinner";
-import { BsX ,BsFillPersonPlusFill,BsFillPersonFill} from "react-icons/bs";
+import { BsX, BsFillPersonPlusFill, BsFillPersonFill } from "react-icons/bs";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { HiOutlineClipboardCopy } from "react-icons/hi";
 import { RiLogoutCircleRLine } from "react-icons/ri";
+import FailureView from "../FailureView";
+//  import AddEmployeePopup from "../AddEmployeePopup"
 
 // import Navbar from '../Navbar';
 
 import IndividualEmployee from "../IndividualEmployee";
 import "./index.css";
 
+const apiStatusConstants = {
+  initial: "INITIAL",
+  success: "SUCCESS",
+  failure: "FAILURE",
+  inProgress: "IN_PROGRESS",
+};
+
 const AllEmployees = (props) => {
   const [employees, setEmployees] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [profileclicked, setIsProfileCLickPopup] = useState(false);
+  const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial);
+
+  // const [profileclicked, setIsProfileCLickPopup] = useState(false);
+  // const [isLoading, setIsLoading] = useState(true);
 
   const [employeeData, setEmployeeData] = useState({
     firstName: "Harish",
@@ -29,9 +42,11 @@ const AllEmployees = (props) => {
     department: "",
     bloodGroup: "A+",
     address: "",
+    password: "",
+    role: "",
   });
 
-  const [inValidDataErrorMsg, setInvalidError] = useState("")
+  // const [inValidDataErrorMsg, setInvalidError] = useState("");
 
   const navigate = useNavigate();
 
@@ -40,12 +55,23 @@ const AllEmployees = (props) => {
     console.log("fetch called");
   }, []);
 
-  const fetchEmployees = async () => {
+  const openPopup = () => {
+    setIsPopupOpen(true);
+    console.log("btn clicked");
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+  async function fetchEmployees() {
     try {
-      const response = await fetch(
-        "http://192.168.0.158:8000/get_all_employees"
-      );
+      console.log("entered fetchemployees");
+      setApiStatus(apiStatusConstants.inProgress);
+      const response = await fetch("http://192.168.0.158:8000/employees");
       const data = await response.json();
+
+      console.log(response);
 
       const CamelCaseData = await data.map((employee) => ({
         firstName: employee.first_name,
@@ -63,17 +89,16 @@ const AllEmployees = (props) => {
         address: employee.address,
         designation: employee.designation,
         joiningDate: employee.joining_date,
+        role: employee.role,
       }));
 
       setEmployees(CamelCaseData);
-      setIsLoading(false);
-
-      console.log();
+      setApiStatus(apiStatusConstants.success);
     } catch (error) {
       console.log("Error fetching employees:", error);
-      setIsLoading(true);
+      setApiStatus(apiStatusConstants.failure);
     }
-  };
+  }
 
   const handleAddEmployeeForm = async (e) => {
     const {
@@ -90,6 +115,8 @@ const AllEmployees = (props) => {
       address,
       bloodGroup,
       gender,
+      role,
+      password,
     } = employeeData;
 
     e.preventDefault();
@@ -113,6 +140,8 @@ const AllEmployees = (props) => {
         department: department,
         address: address,
         blood_group: bloodGroup,
+        password: password,
+        role: role,
       }),
     };
 
@@ -130,6 +159,8 @@ const AllEmployees = (props) => {
       department: department,
       address: address,
       blood_group: bloodGroup,
+      role: role,
+      password: password,
     });
 
     const areDetailsUnique = employees.filter(
@@ -138,36 +169,15 @@ const AllEmployees = (props) => {
         eachEmployee.id === id ||
         eachEmployee.mobileNo === mobileNo
     );
-   
 
     console.log(areDetailsUnique, "is email unique");
 
-    // let checkInputFieldsEmpty = false;
+    // if (areDetailsUnique.length !== 0) {
+    //   setInvalidError("Please enter valid details");
+    // }
 
-    // const checkInputFieldsEmpty =
-    //   firstName.trim() === "" ||
-    //   lastName.trim() === "" ||
-    //   id.trim() === "" ||
-    //   mobileNo.trim() === "" ||
-    //   email.trim() === "" ||
-    //   dob.trim() === "" ||
-    //   joiningDate.trim() === "" ||
-    //   qualifications.trim() === "" ||
-    //   designation.trim() === "" ||
-    //   gender.trim() === "" ||
-    //   department.trim() === "" ||
-    //   bloodGroup.trim() === "" ||
-    //   address.trim() === "";
-
-    // console.log(checkInputFieldsEmpty);
-
-    if (areDetailsUnique.length !== 0) {
-      setInvalidError("Please enter valid details");
-    } 
-
-    
     const response = await fetch(
-      "http://192.168.0.158:8000/create_new_employee",
+      "http://192.168.0.158:8000/create_employee",
       options
     );
     console.log(response, "response from server");
@@ -185,21 +195,10 @@ const AllEmployees = (props) => {
     });
   };
 
-  const openPopup = () => {
-    setIsPopupOpen(true);
-    
-  };
-
-  const closePopup = () => {
-    setIsPopupOpen(false);
-  };
-
-  const onClickProfile = () => {
-    setIsProfileCLickPopup(prevState => !prevState)
-    console.log("profile Clicked")
-  }
-
-  
+  // const onClickProfile = () => {
+  //   setIsProfileCLickPopup((prevState) => !prevState);
+  //   console.log("profile Clicked");
+  // };
 
   const onClickLogout = () => {
     localStorage.removeItem("email");
@@ -230,7 +229,7 @@ const AllEmployees = (props) => {
         <div className="input-element-container">
           <p className="labels">Last Name*</p>
           <input
-          required
+            required
             type="text"
             className="input"
             name="lastName"
@@ -241,8 +240,8 @@ const AllEmployees = (props) => {
         <div className="input-element-container">
           <p className="labels">ID*</p>
           <input
-          // readOnly
-          required
+            // readOnly
+            required
             type="text"
             className="input"
             name="id"
@@ -253,7 +252,7 @@ const AllEmployees = (props) => {
         <div className="input-element-container">
           <p className="labels"> Email*</p>
           <input
-          required
+            required
             type="text"
             className="input"
             name="email"
@@ -262,9 +261,43 @@ const AllEmployees = (props) => {
         </div>
 
         <div className="input-element-container">
+          <p className="labels"> Role*</p>
+          <select
+            name="role"
+            onChange={OnchnageHandler}
+            className="select-element"
+          >
+            <option value="Admin">Admin</option>
+            <option value="Employee">Employee</option>
+          </select>
+        </div>
+
+        <div className="input-element-container justify-content-space-between">
+          <div className="d-flex align-items-center justify-content-between">
+            <p className="labels">Password*</p>
+            <CopyToClipboard
+              text={employeeData.password}
+            >
+              <span>
+                <HiOutlineClipboardCopy className="copy-icon"/>
+              </span>
+            </CopyToClipboard>
+          </div>
+
+         
+          <input
+            required
+            type="text"
+            className="input"
+            name="password"
+            onChange={OnchnageHandler}
+          />
+        </div>
+
+        <div className="input-element-container">
           <p className="labels">Date of Birth*</p>
           <input
-          required
+            required
             type="date"
             className="dateElement"
             name="dob"
@@ -275,7 +308,7 @@ const AllEmployees = (props) => {
         <div className="input-element-container">
           <p className="labels">Joining Date*</p>
           <input
-          required
+            required
             type="date"
             className="dateElement"
             name="joiningDate"
@@ -286,7 +319,7 @@ const AllEmployees = (props) => {
         <div className="input-element-container">
           <p className="labels">Qualifications*</p>
           <input
-          required
+            required
             type="text"
             className="input"
             name="qualifications"
@@ -297,7 +330,7 @@ const AllEmployees = (props) => {
         <div className="input-element-container">
           <p className="labels">Department*</p>
           <input
-          required
+            required
             type="text"
             className="input"
             name="department"
@@ -310,7 +343,6 @@ const AllEmployees = (props) => {
           {/* <input type="input" className="input" name='gender' onChange={OnchnageHandler} /> */}
 
           <select
-           
             className="select-element"
             name="gender"
             onChange={OnchnageHandler}
@@ -323,11 +355,13 @@ const AllEmployees = (props) => {
         <div className="input-element-container">
           <p className="labels">Mobile No*</p>
           <input
-          required
+            required
             type="tel"
             className="input"
             name="mobileNo"
             onChange={OnchnageHandler}
+            maxLength="10"
+            pattern="[0-9]{10}"
           />
         </div>
 
@@ -338,7 +372,6 @@ const AllEmployees = (props) => {
           {/* <input type="text" className="input" name='bloodGroup' onChange={OnchnageHandler} /> */}
 
           <select
-           
             className="select-element"
             name="bloodGroup"
             onChange={OnchnageHandler}
@@ -356,12 +389,12 @@ const AllEmployees = (props) => {
           </select>
         </div>
 
-        <div>
+        <div className="input-element-container">
           <p className="labels" htmlFor="designation">
             Designation*
           </p>
           <input
-          required
+            required
             type="text"
             className="input"
             name="designation"
@@ -370,21 +403,18 @@ const AllEmployees = (props) => {
         </div>
 
         <div>
-          <p className="labels">Address*</p>
-          <textarea
-          required
+          <p className="labels">Location*</p>
+          <input
+            required
             type="text"
-            className="address-input"
+            className="input"
             name="address"
             onChange={OnchnageHandler}
-            rows="3"
-            cols="24"
           />
         </div>
       </div>
 
-
-      {inValidDataErrorMsg.length > 0 && <p>*{inValidDataErrorMsg}</p>}
+      {/* {inValidDataErrorMsg.length > 0 && <p>*{inValidDataErrorMsg}</p>} */}
 
       <button type="submit" className="mt-3 submit-btn">
         Submit
@@ -392,24 +422,102 @@ const AllEmployees = (props) => {
     </form>
   );
 
-  const profilePopup = () => {
+  // const profilePopup = () => {
+  //   const { firstName, lastName } = employeeData;
 
-    const {firstName,lastName,} = employeeData
+  //   return (
+  //     <div>
+  //       <p>
+  //         {firstName} {lastName}!
+  //       </p>
+  //       <p className="mb-0">Your Profile</p>
+  //       <button className="logout-btn mt-0" onClick={onClickLogout}>
+  //         Logout
+  //       </button>
+  //     </div>
+  //   );
+  // };
 
-    return(
-    <div>
-      <p>{firstName} {lastName}!</p>
-      <p className="mb-0">Your Profile</p>
-      <button className="logout-btn mt-0" onClick={onClickLogout}>
-            Logout
-          </button>
+  const noDataDisplay = () => (
+    <div className="d-flex flex-column justify-content-center align-items-center">
+      <img
+        className="noData-img"
+        alt="NoData"
+        src="https://img.freepik.com/free-vector/no-data-concept-illustration_114360-536.jpg?w=740&t=st=1685691455~exp=1685692055~hmac=e7fe93b465ad04cefb40b139444400f1cb0f9068a880f91999b843299068fdca"
+      />
 
-    </div>)
-  }
-  
+      <h3>No Records Found</h3>
+    </div>
+  );
 
+  const renderLoadingView = () => (
+    <div className="tailspin d-flex flex-column align-items-center justify-content-center">
+      <Vortex
+        visible={true}
+        height="80"
+        width="80"
+        ariaLabel="vortex-loading"
+        wrapperStyle={{}}
+        wrapperClass="vortex-wrapper"
+        colors={[
+          "#003480",
+          "#97D7F7",
+          "#003E84",
+          "#97D7F7",
+          "#003480",
+          "#00ADEE",
+        ]}
+      />
+    </div>
+  );
 
+  const renderTable = () => (
+    <table>
+      <thead>
+        <tr>
+          <th>Emp Id</th>
+          <th>NAME</th>
+          <th>EMAIL</th>
+          <th>Role</th>
+          <th>DESIGNATION</th>
+          <th>DEPARTMENT</th>
+          <th>QUALIFICATIONS</th>
+          <th>JOININGDATE</th>
+          <th>DOB</th>
+          <th>GENDER</th>
+          <th>BLOOD GROUP</th>
+          <th>MOBILE NO</th>
+          <th>ADDRESS</th>
+        </tr>
+      </thead>
+      <tbody>
+        {employees.map((employee) => (
+          <IndividualEmployee data={employee} key={employee.id} />
+        ))}
+      </tbody>
+    </table>
+  );
 
+  const renderEmployeeTable = () => (
+    <div className="mt-5 table-container">
+      {employees.length > 0 ? renderTable() : noDataDisplay()}
+    </div>
+  );
+
+  const onClickRetry = () => fetchEmployees();
+
+  const renderAllEmployeesPage = () => {
+    switch (apiStatus) {
+      case apiStatusConstants.success:
+        return renderEmployeeTable();
+      case apiStatusConstants.failure:
+        return <FailureView onClickRetry={onClickRetry} />;
+      case apiStatusConstants.inProgress:
+        return renderLoadingView();
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="d-flex flex-column  mt-0 all-employees-container">
@@ -424,74 +532,33 @@ const AllEmployees = (props) => {
             Add Employee
           </button>
 
-          <button onClick={openPopup} className="add-employee-icon-btn d-flex justify-content-center align-items-center d-md-none">
-            <BsFillPersonPlusFill className="add-employee-icon"/>
+          <button
+            onClick={openPopup}
+            className="add-employee-icon-btn d-flex justify-content-center align-items-center d-md-none"
+          >
+            <BsFillPersonPlusFill className="add-employee-icon" />
           </button>
 
-          <button onClick={onClickLogout} className="logout-icon-btn d-flex justify-content-center align-items-center d-md-none">
-            <RiLogoutCircleRLine className="add-employee-icon"/>
+          <button
+            onClick={onClickLogout}
+            className="logout-icon-btn d-flex justify-content-center align-items-center d-md-none"
+          >
+            <RiLogoutCircleRLine className="add-employee-icon" />
           </button>
 
+          {/* onClick={onClickProfile} */}
 
-         
-          
-
-          <button className="profile-icon-container" onClick={onClickProfile}>
+          <button className="profile-icon-container">
             <BsFillPersonFill size="30px" color="white" />
           </button>
         </div>
       </nav>
 
+      {renderAllEmployeesPage()}
 
-      
-
-      {isLoading ? (
-        <div className="tailspin d-flex flex-column align-items-center justify-content-center">
-          <Vortex
-            visible={true}
-            height="80"
-            width="80"
-            ariaLabel="vortex-loading"
-            wrapperStyle={{}}
-            wrapperClass="vortex-wrapper"
-            colors={[
-              "#003480",
-              "#97D7F7",
-              "#003E84",
-              "#97D7F7",
-              "#003480",
-              "#00ADEE",
-            ]}
-          />
-        </div>
-      ) : (
-        <div className="mt-5 table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Emp Id</th>
-                <th>NAME</th>
-                <th>EMAIL</th>
-                <th>DESIGNATION</th>
-                <th>DEPARTMENT</th>
-                <th>QUALIFICATIONS</th>
-                <th>JOININGDATE</th>
-                <th>DOB</th>
-                <th>GENDER</th>
-                <th>BLOOD GROUP</th>
-                <th>MOBILE NO</th>
-                <th>ADDRESS</th>
-              </tr>
-            </thead>
-            <tbody>
-              {employees.map((employee) => (
-                <IndividualEmployee data={employee} key={employee.id} />
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
+      {/* <div>
+        {isPopupOpen && (<AddEmployeePopup  closePopup={closePopup()} fetchEmployees={fetchEmployees()}/>)}
+      </div> */}
 
       <div>
         {isPopupOpen && (
@@ -501,17 +568,13 @@ const AllEmployees = (props) => {
         )}
       </div>
 
-      <div>
+      {/* <div>
         {profileclicked && (
           <div className="popup-overlay-profile d-flex justify-content-end">
             <div className="popup-content-profile ">{profilePopup()}</div>
           </div>
         )}
-      </div>
-
-
-
-
+      </div> */}
     </div>
   );
 };

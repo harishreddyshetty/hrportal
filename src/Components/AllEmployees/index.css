@@ -68,12 +68,6 @@
   height:35px;
 }
 
-
-
-
-
-
-
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -102,7 +96,19 @@
   padding: 10px 25px 25px 25px;
   border-radius: 8px;
   width:650px;
+ 
   
+}
+
+
+.add-employee-form-container{
+  width:600px;
+  /* height: 600px; */
+  /* background-color: #003480; */
+  height:fit-content;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: auto;
 }
 
 
@@ -188,6 +194,10 @@
   position: fixed;
 }
 
+.noData-img{
+  width:600px;
+}
+
 
 
 
@@ -228,12 +238,7 @@
   font-weight: 600;
 }
 
-.add-employee-form-container{
-  width:600px;
-  height:600px;
-  display: flex;
-  flex-wrap: wrap;
-}
+
 
 
 .input-element-container{
@@ -391,6 +396,11 @@ h3{
   min-width:375px;
 }
 
+
+.copy-icon{
+  font-size: 18px;
+  cursor: pointer;
+}
 
 
 

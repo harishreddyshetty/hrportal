@@ -1,0 +1,64 @@
+p{
+    font-size: 20px;
+    font-family: bold;
+}
+.loader-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.avatar{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    color: white;
+    font-weight: 700;
+    font-size: 24px;
+    padding: 10px;
+    font-family: Roboto;
+    text-align: center;
+}
+.display-bold{
+    font-weight: 800;
+    font-family: serif;
+
+}
+.employee-navbar-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;  
+    border-bottom: 1px solid aliceblue;
+   
+}
+.employee-container{
+    background-color: aliceblue;
+    max-height: 100%;
+    min-height: 100vh;
+}
+.company-logo-header{
+    width:180px;
+    
+  }
+
+span{
+    width: 210px;
+    display: inline-block;
+    font-weight: 300;
+   
+}
+.back-to-home{
+    margin-top: 20px;
+    align-self: center;
+    border: 0px;
+    background-color:#003480;
+    color: white;
+    height: 45px;
+    width: 170px;
+    padding: 5px;
+    border-radius: 5px;
+
+}

@@ -1,0 +1,28 @@
+
+.failure-img{
+    width:400px;
+    margin-bottom: 25px;
+}
+
+.failure-container{
+    height:100vh;
+    
+}
+
+.retry-btn{
+    background-color: #00ADEE;
+    color:white;
+    height:35px;
+    width:100px;
+    border: 0px none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+@media (max-width:767px){
+    .failure-img{
+        width:280px;
+        margin-bottom: 25px;
+    }
+}

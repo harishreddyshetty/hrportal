@@ -2,3 +2,10 @@
 .not-found-img{
     width:700px;
 }
+
+@media (max-width:767px){
+    .not-found-img{
+        width:300px;
+
+    }
+}

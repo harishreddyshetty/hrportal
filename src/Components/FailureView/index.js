@@ -15,8 +15,8 @@ const FailureView = (props) => {
         alt="failure view"
         src="https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png"
       />
-      <h1>Oops! Something Went Wrong</h1>
-      <p className="failure-para">
+      <h1 className="text-center">Oops! Something Went Wrong</h1>
+      <p className="failure-para text-center">
         We are having some trouble to complete your request.
         <br /> Please try again.
       </p>

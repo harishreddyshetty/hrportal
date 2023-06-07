@@ -6,7 +6,7 @@ const EmployeeDetails = () => {
   const [employeeData, setEmployeeData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showProfile, setShowProfile] = useState(false);
-
+  const backendEndpoint=process.env.REACT_APP_BACKEND_ENDPOINT      
   const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
   const avatarStyle = {
     backgroundColor: randomColor,
@@ -15,7 +15,8 @@ const EmployeeDetails = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://192.168.0.158:8000/employee/santosh.naruje@openskale.com"
+          `${backendEndpoint}/employee/santosh.naruje@openskale.com`
+        
         );
 
         const data = await response.json();

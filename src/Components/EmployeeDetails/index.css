@@ -19,6 +19,7 @@ p{
     padding: 10px;
     font-family: Roboto;
     text-align: center;
+    margin-top:15px;
 }
 .display-bold{
     font-weight: 800;
@@ -29,10 +30,7 @@ p{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
-    padding: 30px;  
-    border-bottom: 1px solid aliceblue;
-   
+    align-items: center; 
 }
 .employee-container{
     background-color: aliceblue;

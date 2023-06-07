@@ -5,6 +5,7 @@ import AllEmployees from "./Components/AllEmployees";
 import NotFoundRoute from "./Components/NotFoundRoute";
 import HomeRoute from "./Components/HomeRoute";
 import LeaveRequestsRoute from "./Components/LeaveRequestsRoute";
+import LeaveManagement from "./Components/LeaveManagement";
 
 import "./App.css";
 

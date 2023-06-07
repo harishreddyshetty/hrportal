@@ -1,0 +1,20 @@
+.form-btn-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: red;
+    margin-bottom: 10px;
+}
+.submit-leave-btn{
+    margin-top: 20px;
+    align-self: center;
+    border: 0px;
+    background-color:#003480;
+    color: white;
+    height: 45px;
+    width: 170px;
+    padding: 5px;
+    border-radius: 5px;
+   margin-bottom: 30px;
+
+}

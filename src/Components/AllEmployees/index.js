@@ -27,6 +27,7 @@ const apiStatusConstants = {
   failure: "FAILURE",
   inProgress: "IN_PROGRESS",
 };
+const backendEndpoint=process.env.REACT_APP_BACKEND_ENDPOINT;
 
 const AllEmployees = (props) => {
   const [employees, setEmployees] = useState([]);
@@ -88,6 +89,7 @@ const AllEmployees = (props) => {
   const fetchEmployees = async () => {
     try {
       setApiStatus(apiStatusConstants.inProgress);
+<<<<<<< HEAD
       const loginData = JSON.parse(localStorage.getItem("loginDetails"));
       const jwtToken = loginData.details.jwt_token;
 
@@ -98,6 +100,9 @@ const AllEmployees = (props) => {
         },
       };
       const response = await fetch(`${backendEndpoint}/employees`, options);
+=======
+      const response = await fetch(`${backendEndpoint}/employees`);
+>>>>>>> 4585445 (Created LeaveForm component)
       const data = await response.json();
 
       const updatedData = await data.map((employee) => ({
@@ -176,6 +181,7 @@ const AllEmployees = (props) => {
   //     }),
   //   };
 
+<<<<<<< HEAD
   //   console.log({
   //     first_name: firstName,
   //     last_name: lastName,
@@ -193,6 +199,11 @@ const AllEmployees = (props) => {
   //     password: password,
   //     role: role,
   //   });
+=======
+    const response = await fetch(`${backendEndpoint}/create_employee`,
+      options
+    );
+>>>>>>> 4585445 (Created LeaveForm component)
 
   //   const response = await fetch(`${backendEndpoint}/create_employee`, options);
   //   console.log(response,"response on form submittion")

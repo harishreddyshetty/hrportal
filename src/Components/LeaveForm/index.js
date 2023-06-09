@@ -9,7 +9,7 @@ const LeaveForm = ({leaveApplied}) => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [leaveDays, setLeaveDays] = useState(0);
   const [isLeaveApplied, setIsLeaveApplied] = useState(false);
-
+  const email=localStorage.getItem("email")
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -37,55 +37,27 @@ const LeaveForm = ({leaveApplied}) => {
     const formattedEndDate = dateRange[1]?.toLocaleDateString("en-GB");
 
     console.log("HR:", hr);
+    console.log("employeeEmail:",email)
     console.log("Reason:", reason);
     console.log("Start Date:", formattedStartDate);
     console.log("End Date:", formattedEndDate);
     console.log("Leave Days:", leaveDays);
-
+  
+    const leaveAppliedForm=()=>{
+      leaveApplied()
+    }
     // Reset form
     setHr("");
     setReason("");
     setDateRange([null, null]);
     setLeaveDays(0);
     setIsLeaveApplied(true);
-    setTimeout(leaveApplied(),3000)
+    setTimeout(leaveAppliedForm,1000)
     
   };
 
   return (
     <form onSubmit={handleFormSubmit}>
-      <div className="form-group col-lg-9 mb-3">
-        <label htmlFor="hr">Select HR:</label>
-        <select
-          id="hr"
-          className="form-control"
-          required
-          value={hr}
-          onChange={(e) => setHr(e.target.value)}
-        >
-          <option value="">Select HR</option>
-          <option value="suresh.salloju@openskale.com">
-            suresh.salloju@openskale.com
-          </option>
-          <option value="vikas.voladri@openskale.com">
-            vikas.voladri@openskale.com
-          </option>
-          <option value="santhosh.bhumireddy@openskale.com">
-            santhosh.bhumireddy@openskale.com
-          </option>
-        </select>
-      </div>
-      <div className="form-group col-lg-9 mb-3">
-        <label htmlFor="reason">Reason for Leave:</label>
-        <input
-          type="text"
-          id="reason"
-          required
-          className="form-control"
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-        />
-      </div>
       <div className="form-group col-lg-9 mb-3">
         <label htmlFor="dateRange">Date Range:</label>
         <DatePicker
@@ -102,13 +74,46 @@ const LeaveForm = ({leaveApplied}) => {
           className="form-control"
         />
       </div>
+      <div className="form-group col-lg-9 mb-3">
+        <label htmlFor="hr">Select Your Lead:</label>
+        <select
+          id="hr"
+          className="form-control"
+          required
+          value={hr}
+          onChange={(e) => setHr(e.target.value)}
+        >
+          <option value="lead" > Select Your Lead </option>
+          <option value="suresh.salloju@openskale.com">
+            suresh.salloju@openskale.com
+          </option>
+          <option value="vikas.voladri@openskale.com">
+            vikas.voladri@openskale.com
+          </option>
+          <option value="santhosh.bhumireddy@openskale.com">
+            santhosh@openskale.com
+          </option>
+        </select>
+      </div>
+      <div className="form-group col-lg-9 mb-3">
+        <label htmlFor="reason">Reason for Leave:</label>
+        <input
+          type="text"
+          id="reason"
+          required
+          className="form-control"
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+        />
+      </div>
+      
       {leaveDays > 0 && (
           <p>Number of Leave Days: {leaveDays}</p>
         )}
       <div className="form-btn-container">
         
         {isLeaveApplied ? (
-          <p className="text-success">Leave applied successfully</p>
+          <p className="text-success success-msg">Leave applied successfully</p>
         ) : (
           <button type="submit" className="submit-leave-btn">
             Apply Leave

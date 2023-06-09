@@ -5,6 +5,10 @@
     color: red;
     margin-bottom: 10px;
 }
+.success-msg{
+    font-family: Jost,sans-serif;
+    font-size: 24px;
+}
 .submit-leave-btn{
     margin-top: 20px;
     align-self: center;

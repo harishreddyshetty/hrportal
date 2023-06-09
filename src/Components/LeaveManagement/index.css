@@ -4,7 +4,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+   
 }
 .widget-btn.active {
     width: auto;
@@ -13,16 +13,17 @@
   
 .modal-container{
     position: absolute;
-    background-color: white;
+    background-color: aliceblue;
     font-family: serif;
     font-size: 22px;
     padding: 20px;
     left: 25%;
     right: 25%;
-    top: 5%;
+    top: 20%;
     bottom: 20%;
     box-shadow: 4px 4px 18px rgba(0, 0, 0, 0.2);
     flex-grow: 1;
+    overflow-y: auto;
     
 }
 @media (max-width:768px){
@@ -47,7 +48,7 @@
 .close-btn-div{
     display: flex;
     flex-direction: row;
-   justify-content: end;
+   justify-content: flex-end;
   
     margin: 10px;
 }
@@ -67,24 +68,44 @@
     width:180px;
     margin-left: 20px;
   }
-.widget-btn {
-    background-color: #01488E;
+  .widget-btn {
+    background-color: #47B2E4;
     height: 54px;
-    width: 180px;
-    
+    width: 200px;
     border: none;
     margin: 10px;
     border: none;
     padding: 10px 20px;
-    color: white;
+    color:white;
     border-radius: 10px;
     font-size: 22px;
     font-family: serif;
-    transition: background-color 0.4s ease-out;
-}
-.widget-btn:hover{
-    background-color: #00ADEE;
-}
+    font-weight: 600;
+    
+  }
+  
+
+  
+.custom-table {
+    width: 100%; /* Set the width of the table */
+    border-collapse: collapse; /* Merge border-spacing */
+    overflow: auto;
+
+  }
+  
+  .custom-table th, .custom-table td {
+    padding: 8px; /* Set padding for table cells */
+    text-align: left; /* Align text within cells */
+    border: 1px solid #ddd; /* Add border to cells */
+  }
+  
+  .custom-table th {
+    background-color: #f2f2f2; /* Set background color for table header */
+    font-weight: bold; /* Apply bold font to table header */
+  }
+  
+ 
+  
 
 /* .transition-btn {
     background-color: #003480;
@@ -137,4 +158,18 @@
     justify-content: space-between;
     align-items: center;
     
+}
+.leave-history-container{
+  padding: 30px;
+}
+.leave-header{
+    color: #003480;
+    font-size: 32px;
+    margin-top: 20px;
+    font-family: serif;
+    text-align: center;
+    font-weight: 700;
+}
+.active{
+  background-color: #37517D;
 }

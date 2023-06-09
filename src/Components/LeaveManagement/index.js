@@ -1,45 +1,69 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import LeaveForm from "../LeaveForm";
 
 import "./index.css";
 
 const LeaveManagement = () => {
-  const [showProfile, setShowProfile] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showTotal, setShowTotal] = useState(false);
-  const [showBalance,setShowBalance]=useState(false);
-  const [showUsed,setShowUsed]=useState(false)
-  const [employee, setEmployee] = useState([]);
-  const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-  const avatarStyle = {
-    backgroundColor: randomColor,
+  const [activeButton, setActiveButton] = useState(null);
+
+  const handleButtonClick = (buttonId) => {
+    setActiveButton(buttonId);
+    setIsModalOpen(false);
   };
-  const backendEndpoint = process.env.REACT_APP_BACKEND_ENDPOINT;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `${backendEndpoint}/employee/santosh.naruje@openskale.com`
+  const handleApplyLeaveClick = () => {
+    setActiveButton("apply");
+    setIsModalOpen(true)
+  };
+
+
+
+  const renderContent = () => {
+    switch (activeButton) {
+      case "history":
+        return (
+          <div className="leave-history-container">
+            <div className="close-btn-div">
+              <button className="close-btn" onClick={closeBtn} type="button">
+                X
+              </button>
+            </div>
+            <table className="custom-table">
+              <thead>
+                <tr>
+                  <th>START DATE</th>
+                  <th>END DATE</th>
+                  <th>NO OF LEAVE DAYS</th>
+                  <th>STATUS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>8/4/2022</td>
+                  <td>8/4/2022</td>
+                  <td>1</td>
+                  <td>Pending</td>
+                </tr>
+                {/* Rest of the table rows */}
+              </tbody>
+            </table>
+          </div>
         );
-
-        const data = await response.json();
-        setEmployee(data);
-        setShowProfile(true);
-      } catch (error) {
-        console.error("Error fetching employee data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const applyLeave = () => {
-    setIsModalOpen(true);
+      case "total":
+        return <h1 className="leave-header">12</h1>;
+      case "balance":
+        return <h1 className="leave-header">12</h1>;
+      case "used":
+        return <h1 className="leave-header">0</h1>;
+      default:
+        return null;
+    }
   };
 
   const closeBtn = () => {
     setIsModalOpen(false);
+    setActiveButton(null)
   };
 
   const leaveApplied = () => {
@@ -47,65 +71,59 @@ const LeaveManagement = () => {
   };
 
   return (
-    <div className="employee-container">
-      <header>
-        <nav className="employee-navbar-container">
-          <img
-            className="company-logo-header"
-            src="https://i.postimg.cc/kX5s4kWg/Openscale-Technologies-D6-CV.png"
-            alt="logo"
-          />
-          {showProfile && (
-            <p
-              className="avatar"
-              style={{ backgroundColor: `${avatarStyle.backgroundColor}` }}
-            >
-              {"Santosh".charAt(0)}
-            </p>
-          )}
-        </nav>
-      </header>
-      <div className="employee-container d-flex flex-column">
+    <div className="leave-container">
+      {/* Header and other content */}
+      <div>
         <div className="d-flex flex-row justify-content-center flex-wrap">
-          <button className="widget-btn" type="button">
-            Leaves History
-          </button>
+          <div >
+            <button
+              onClick={() => handleButtonClick("history")}
+              className={`widget-btn ${
+                activeButton === "history" ? "active" : ""
+              }`}
+              type="button"
+            >
+              Leaves History
+            </button>
+          </div>
           <div className="d-flex flex-column">
             <button
-              onClick={() => setShowTotal(!showTotal)}
-              className="widget-btn"
+              onClick={() => handleButtonClick("total")}
+              className={`widget-btn ${
+                activeButton === "total" ? "active" : ""
+              }`}
               type="button"
             >
               Total Leaves
             </button>
-            {showTotal && <h1 className="text-center text-success">12</h1>}
           </div>
 
           <div className="d-flex flex-column">
             <button
-              onClick={() => setShowBalance(!showBalance)}
-              className="widget-btn"
+              onClick={() => handleButtonClick("balance")}
+              className={`widget-btn ${
+                activeButton === "balance" ? "active" : ""
+              }`}
               type="button"
             >
               Balance Leaves
             </button>
-            {showBalance && <h1 className="text-center text-secondary">12</h1>}
           </div>
           <div className="d-flex flex-column">
             <button
-              onClick={() => setShowUsed(!showUsed)}
-              className="widget-btn"
+              onClick={() => handleButtonClick("used")}
+              className={`widget-btn ${activeButton === "used" ? "active" : ""}`}
               type="button"
             >
               Used Leaves
             </button>
-            {showUsed && <h1 className="text-center text-secondary">0</h1>}
           </div>
-            
-         
+
           <button
-            className="widget-btn"
-            onClick={applyLeave}
+            className={`widget-btn ${
+              activeButton === "apply" ? "active" : ""
+            }`}
+            onClick={handleApplyLeaveClick}
             type="button"
           >
             Apply Leave
@@ -114,11 +132,7 @@ const LeaveManagement = () => {
         {isModalOpen && (
           <div className="modal-container">
             <div className="close-btn-div">
-              <button
-                className="close-btn"
-                onClick={closeBtn}
-                type="button"
-              >
+              <button className="close-btn" onClick={closeBtn} type="button">
                 X
               </button>
             </div>
@@ -127,10 +141,10 @@ const LeaveManagement = () => {
             </div>
           </div>
         )}
+        {renderContent()}
       </div>
     </div>
   );
 };
 
 export default LeaveManagement;
-

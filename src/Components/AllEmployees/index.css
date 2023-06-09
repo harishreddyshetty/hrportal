@@ -95,12 +95,12 @@
 }
 
 .popup-content {
-  /* background-color: aliceblue; */
+  /* background-color: blue; */
   background-color: white;
   padding: 10px 25px 25px 25px;
   border-radius: 8px;
   width:650px;
- 
+  height: 95vh;
   
 }
 
@@ -118,7 +118,7 @@
 
 
 .popup-content-profile {
-  /* background-color: aliceblue; */
+ 
   background-color: white;
   padding: 10px 25px 25px 25px;
   box-shadow: 0px 0px 2px 4px aliceblue;

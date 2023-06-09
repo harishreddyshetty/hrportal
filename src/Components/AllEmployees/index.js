@@ -1,17 +1,19 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import DataTable from "react-data-table-component";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+// import DataTable from "react-data-table-component";
 import { Vortex } from "react-loader-spinner";
 import { BsX, BsFillPersonPlusFill, BsFillPersonFill } from "react-icons/bs";
+import { RiLogoutCircleRLine } from "react-icons/ri";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { HiOutlineClipboardCopy } from "react-icons/hi";
-import { RiLogoutCircleRLine } from "react-icons/ri";
+// import { RiLogoutCircleRLine } from "react-icons/ri";
 import FailureView from "../FailureView";
 //  import AddEmployeePopup from "../AddEmployeePopup"
 
-// import Navbar from '../Navbar';
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
 
-// import IndividualEmployee from "../IndividualEmployee";
 import "./index.css";
 
 const apiStatusConstants = {
@@ -46,8 +48,7 @@ const AllEmployees = (props) => {
     role: "Admin",
   });
 
- 
-// const [searchValue, setSearchValue] = useState("")
+  // const [searchValue, setSearchValue] = useState("")
 
   const navigate = useNavigate();
 
@@ -58,6 +59,7 @@ const AllEmployees = (props) => {
 
   const openPopup = () => {
     setIsPopupOpen(true);
+    setIsProfileCLickPopup(false);
   };
 
   const closePopup = () => {
@@ -66,8 +68,19 @@ const AllEmployees = (props) => {
 
   const fetchEmployees = async () => {
     try {
-      console.log("entered fetchemployees");
+      // headers: {
+      //   authorization: `bearer ${jwtToken}`,
+      // },
       setApiStatus(apiStatusConstants.inProgress);
+      // const loginData = JSON.parse(localStorage.getItem("loginDetails"));
+      // const jwtToken = loginData.details.jwt_token;
+
+      // const options = {
+      //   method: "GET",
+      //   headers: {
+      //     authorization: `bearer ${jwtToken}`,
+      //   },
+      // };
       const response = await fetch("http://192.168.0.158:8000/employees");
       const data = await response.json();
 
@@ -127,7 +140,7 @@ const AllEmployees = (props) => {
     e.preventDefault();
 
     const options = {
-      method: "post",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -141,10 +154,10 @@ const AllEmployees = (props) => {
         joining_date: joiningDate,
         qualifications: qualifications,
         designation: designation,
-        gender: gender,
         department: department,
         address: address,
         blood_group: bloodGroup,
+        gender: gender,
         password: password,
         role: role,
       }),
@@ -154,8 +167,6 @@ const AllEmployees = (props) => {
       "http://192.168.0.158:8000/create_employee",
       options
     );
-
-    // const response = {status:200}
 
     if (response.status === 200) {
       setIsPopupOpen(false);
@@ -167,7 +178,6 @@ const AllEmployees = (props) => {
       setInvalidError(data.detail);
     }
   };
-
 
   const onChangeInputs = (e) => {
     setEmployeeData({
@@ -186,8 +196,7 @@ const AllEmployees = (props) => {
     navigate("/");
   };
 
- 
-// add employee form
+  // add employee form
   const popupForm = () => (
     <form className="form-group" onSubmit={handleAddEmployeeForm}>
       <div className="d-flex justify-content-end m-0">
@@ -349,7 +358,6 @@ const AllEmployees = (props) => {
           <p className="labels" htmlFor="address">
             Blood Group*
           </p>
-          {/* <input type="text" className="input" name='bloodGroup' onChange={onChangeInputs} /> */}
 
           <select
             className="select-element"
@@ -404,19 +412,20 @@ const AllEmployees = (props) => {
     </form>
   );
 
-
-// popup on clicking profile icon
+  // popup on clicking profile icon
   const profilePopup = () => {
     return (
       <div>
-        <p className="mb-0">Your Profile</p>
+        <Link to="/employee">
+          <p className="mb-0">Your Profile</p>
+        </Link>
+
         <button className="logout-btn mt-0" onClick={onClickLogout}>
           Logout
         </button>
       </div>
     );
   };
-
 
   const noDataDisplay = () => (
     <div className="d-flex flex-column justify-content-center align-items-center">
@@ -429,7 +438,6 @@ const AllEmployees = (props) => {
       <h3>No Records Found</h3>
     </div>
   );
-
 
   const renderLoadingView = () => (
     <div className="tailspin d-flex flex-column align-items-center justify-content-center">
@@ -452,109 +460,72 @@ const AllEmployees = (props) => {
     </div>
   );
 
-  // const renderTable = () => (
-  //   <table>
-  //     <thead>
-  //       <tr>
-  //         <th>Emp Id</th>
-  //         <th>NAME</th>
-  //         <th>EMAIL</th>
-  //         <th>Role</th>
-  //         <th>DESIGNATION</th>
-  //         <th>DEPARTMENT</th>
-  //         <th>QUALIFICATIONS</th>
-  //         <th>JOININGDATE</th>
-  //         <th>DOB</th>
-  //         <th>GENDER</th>
-  //         <th>BLOOD GROUP</th>
-  //         <th>MOBILE NO</th>
-  //         <th>ADDRESS</th>
-  //       </tr>
-  //     </thead>
-  //     <tbody>
-  //       {employees.map((employee) => (
-  //         <IndividualEmployee data={employee} key={employee.id} />
-  //       ))}
-  //     </tbody>
-  //   </table>
-  // );
-
-  
-
-  // cell: row => <div style={{fontSize: 16}}>{row.id}</div>
-
-  const columns = [
-    { name: "Emp Id", selector: (row) => row.id ,sortable: true},
-    { name: "NAME", selector: (row) => row.firstName },
-    { name: "EMAIL", selector: (row) => row.email , width:"300px",},
-    { name: "ROLE", selector: (row) => row.role },
-    { name: "DESIGNATION", selector: (row) => row.designation },
-    { name: "DEPARTMENT", selector: (row) => row.department },
-    { name: "QUALIFICATIONS", selector: (row) => row.qualifications },
-    { name: "JOINING DATE", selector: (row) => row.joiningDate },
-    { name: "DOB", selector: (row) => row.dob },
-    { name: "GENDER", selector: (row) => row.gender },
-    { name: "BLOOD GROUP", selector: (row) => row.bloodGroup },
-    { name: "MOBILE NO", selector: (row) => row.mobileNo },
-    { name: "LOCATION", selector: (row) => row.location },
+  const columnDefs = [
+    { headerName: "Emp Id", field: "id", width: "110px", filter: true },
+    {
+      headerName: "NAME",
+      valueGetter: function (params) {
+        const firstName = params.data.firstName;
+        const lastName = params.data.lastName;
+        const combinedData = firstName + " " + lastName;
+        return combinedData;
+      },
+      filter: true,
+      sortable: true,
+    },
+    { headerName: "EMAIL", field: "email" },
+    { headerName: "ROLE", field: "role", width: "130px" },
+    {
+      headerName: "DESIGNATION",
+      field: "designation",
+      width: "200px",
+      filter: true,
+    },
+    { headerName: "DEPARTMENT", field: "department" },
+    { headerName: "QUALIFICATIONS", field: "qualifications" },
+    { headerName: "JOINING DATE", field: "joiningDate", width: "150px" },
+    { headerName: "DOB", field: "dob", width: "120px" },
+    {
+      headerName: "GENDER",
+      field: "gender",
+      width: "150px",
+      cellStyle: { display: "flex", "justify-content": "center" },
+    },
+    {
+      headerName: "BLOOD GROUP",
+      field: "bloodGroup",
+      width: "150px",
+      cellStyle: { display: "flex", "justify-content": "center" },
+      filter: true,
+    },
+    { headerName: "MOBILE NO", field: "mobileNo", width: "130px" },
+    { headerName: "LOCATION", field: "location", filter: true },
   ];
 
-  const customStyles = {
-    rows: {
-      style: {
-        // Style for table rows
-        fontSize: "16px",
-        minHeight: "48px", // Set the height of the rows
-      },
-    },
-    headCells: {
-      style: {
-        // Style for table header cells
-        fontSize: "16px",
-        fontWeight: "bold",
-        paddingLeft: "16px",
-        paddingRight: "16px",
-      },
-    },
-    cells: {
-      style: {
-        // Style for table cells
-        paddingLeft: "16px",
-        paddingRight: "16px",
-      },
-    },
-  };
-
-  // const onChangeSearch = (e) =>{
-  //   setSearchValue(e.target.value)
-  //   const CopyOfEmployees = employees.slice(0)
-  //   console.log(CopyOfEmployees,"copy")
-  //     const filteredData = CopyOfEmployees.filter(eachEmp => eachEmp.firstName.toLowerCase().includes(e.target.value.toLowerCase()))
-  //     console.log(filteredData,"filtered")
-  //     setEmployees(filteredData)
-    
-  // }
-
-  const renderTable = () => (
-    <div className="data-table-container">
-      <DataTable
-        title="All Employees"
-        customStyles={customStyles}
-        selectableRows
-        highlightOnHover
-        selectableRowsHighlight
-        columns={columns}
-        data={employees}
-        pagination
-        subHeader
-        // subHeaderComponent = {
-        //   <input type="search" placeholder="Search Name" className="search-input" onChange={onChangeSearch}/>
-        // }
-      />
-    </div>
+  const defaultColDef = useMemo(
+    () => ({
+      cellStyle: { "font-size": "16px" },
+    }),
+    []
   );
 
+  const paginationPageSize = 10;
 
+  const renderTable = () => (
+    <div
+      className="ag-theme-alpine"
+      style={{ height: "70vh", width: "100%", fontSize: "16px" }}
+    >
+      <AgGridReact
+        title="All Employees"
+        columnDefs={columnDefs}
+        rowData={employees}
+        pagination={true}
+        paginationPageSize={paginationPageSize}
+        defaultColDef={defaultColDef}
+      ></AgGridReact>
+    </div>
+  );
 
   const renderEmployeeTable = () => (
     <div className="mt-5 table-container">
@@ -577,16 +548,17 @@ const AllEmployees = (props) => {
     }
   };
 
-
-  
   return (
     <div className="d-flex flex-column  mt-0 all-employees-container">
       <nav className="header-container">
-        <img
-          className="company-logo-header"
-          src="https://i.postimg.cc/kX5s4kWg/Openscale-Technologies-D6-CV.png"
-          alt="logo"
-        />
+        <Link to="/">
+          <img
+            className="company-logo-header"
+            src="https://i.postimg.cc/kX5s4kWg/Openscale-Technologies-D6-CV.png"
+            alt="logo"
+          />
+        </Link>
+
         <div className="header-elements-right">
           <button className="add-employee-btn" onClick={openPopup}>
             Add Employee
@@ -605,8 +577,6 @@ const AllEmployees = (props) => {
           >
             <RiLogoutCircleRLine className="add-employee-icon" />
           </button>
-
-          {/* onClick={onClickProfile} */}
 
           <button onClick={onClickProfile} className="profile-icon-container">
             <BsFillPersonFill size="30px" color="white" />

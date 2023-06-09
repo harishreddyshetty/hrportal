@@ -25,6 +25,7 @@ const leavesReq = [
     Days: "5",
     reason: "Medical",
     status: "Pending",
+    rejectedReason: "not a valid Reason",
   },
   {
     id: "OS002",
@@ -91,13 +92,13 @@ class LeaveRequestsRoute extends Component {
 
   onClickApprove = (params) => {
     const rowData = params.data;
-    console.log({...rowData,status:"Approved"});
+    console.log({ ...rowData, status: "Approved" });
   };
 
   onClickReject = (params) => {
     const rowData = params.data;
-    console.log({...rowData,status:"Rejected"});
-    this.setState({rejectClicked:true})
+    console.log({ ...rowData, status: "Rejected" });
+    this.setState({ rejectClicked: true });
   };
 
   onClickSubmitReson = (event) => {
@@ -145,7 +146,7 @@ class LeaveRequestsRoute extends Component {
     const { rejectClicked } = this.state;
 
     const columns = [
-      { name: "Emp Id",field:"id"},
+      { name: "Emp Id", field: "id" },
       {
         headerName: "NAME",
         valueGetter: function (params) {
@@ -157,51 +158,67 @@ class LeaveRequestsRoute extends Component {
         filter: true,
         sortable: true,
       },
-      { name: "Start Date",field:"startDate"},
-      { name: "End Date",field:"endDate" },
-      { name: "Days",field:"Days"},
-      { name: "Reason",field:"reason"  },
-
+      { name: "Start Date", field: "startDate" },
+      { name: "End Date", field: "endDate" },
+      { name: "Days", field: "Days" },
+      { name: "Reason", field: "reason" },
 
       {
-        headerName: 'Actions',
+        headerName: "Actions",
         cellRenderer: (params) => (
-          <button className="approve-rej-btn d-flex  justify-content-center align-items-center" onClick={() => this.onClickApprove(params)}>Approve</button>
+          <button
+            className="approve-btn d-flex  justify-content-center align-items-center"
+            onClick={() => this.onClickApprove(params)}
+          >
+            Approve
+          </button>
         ),
       },
 
       {
-        headerName: 'Actions',
+        headerName: "Actions",
         cellRenderer: (params) => (
-          <button className="approve-rej-btn d-flex  justify-content-center align-items-center" onClick={() => this.onClickReject(params)}>Reject</button>
+          <button
+            className="reject-btn d-flex  justify-content-center align-items-center"
+            onClick={() => this.onClickReject(params)}
+          >
+            Reject
+          </button>
         ),
       },
-      
-      
     ];
 
-    
     const paginationPageSize = 10;
 
-    // const columnsLeaveHistory = [
-    //   { name: "Emp Id", selector: (row) => row.id, sortable: true },
-    //   { name: "NAME", selector: (row) => row.name },
-    //   { name: "Start Date", selector: (row) => row.startDate },
-    //   { name: "End Date", selector: (row) => row.endDate },
-    //   { name: "Days", selector: (row) => row.Days },
-    //   { name: "Reason", selector: (row) => row.reason },
-    //   { name: "Status", selector: (row) => row.status },
-    //   { name: "Rejected Reason", selector: (row) => row.rejectedReason },
-    // ];
+    const columnsLeaveHistory = [
+      { name: "Emp Id", field: "id" },
+      {
+        headerName: "NAME",
+        valueGetter: function (params) {
+          const firstName = params.data.Firstname;
+          const lastName = params.data.LastName;
+          const combinedData = firstName + " " + lastName;
+          return combinedData;
+        },
+        filter: true,
+        sortable: true,
+      },
+      { name: "Start Date", field: "startDate" },
+      { name: "End Date", field: "endDate" },
+      { name: "Days", field: "Days" },
+      { name: "Reason", field: "reason" },
+      { name: "Rejected Reason", field: "rejectedReason" },
+    ];
 
     return (
       <>
         <Header />
-       
+
         <div
           className="ag-theme-alpine ag-grid-table"
-          style={{ height: "70vh", width: "100%", fontSize: "16px" }}
+          style={{ height: "50vh", width: "85vw", fontSize: "16px" }}
         >
+          <h4 className="mb-3">Leave Requests</h4>
           <AgGridReact
             rowData={leavesReq}
             columnDefs={columns}
@@ -210,7 +227,19 @@ class LeaveRequestsRoute extends Component {
           ></AgGridReact>
         </div>
 
-        
+        <div
+          className="ag-theme-alpine ag-grid-table"
+          style={{ height: "50vh", width: "85vw", fontSize: "16px" }}
+        >
+          <h4 className="mb-3">Leaves History</h4>
+          <AgGridReact
+            rowData={leavesReq}
+            columnDefs={columnsLeaveHistory}
+            pagination={true}
+            paginationPageSize={paginationPageSize}
+          ></AgGridReact>
+        </div>
+
         <div id="addEmployeeForm">
           {rejectClicked && (
             <div className="popup-overlay-reason">

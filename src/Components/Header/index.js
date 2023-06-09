@@ -33,7 +33,7 @@ const Header = (props) => {
   const profilePopup = () => {
     return (
       <div className="">
-        <Link to="/employee">
+        <Link className="remove-underline" to="/employee">
         <p className="mb-0">Your Profile</p>
         </Link>
         

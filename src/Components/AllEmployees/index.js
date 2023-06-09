@@ -68,20 +68,19 @@ const AllEmployees = (props) => {
 
   const fetchEmployees = async () => {
     try {
-      // headers: {
-      //   authorization: `bearer ${jwtToken}`,
-      // },
+     
       setApiStatus(apiStatusConstants.inProgress);
-      // const loginData = JSON.parse(localStorage.getItem("loginDetails"));
-      // const jwtToken = loginData.details.jwt_token;
+      const loginData = JSON.parse(localStorage.getItem("loginDetails"));
+      const jwtToken = loginData.details.jwt_token;
 
-      // const options = {
-      //   method: "GET",
-      //   headers: {
-      //     authorization: `bearer ${jwtToken}`,
-      //   },
-      // };
-      const response = await fetch("http://192.168.0.158:8000/employees");
+
+      const options = {
+        method: "GET",
+        headers: {
+          Authorization: `bearer ${jwtToken}`,
+        },
+      };
+      const response = await fetch("http://192.168.0.158:8000/employees",options);
       const data = await response.json();
 
       const updatedData = await data.map((employee) => ({
@@ -461,7 +460,7 @@ const AllEmployees = (props) => {
   );
 
   const columnDefs = [
-    { headerName: "Emp Id", field: "id", width: "110px", filter: true },
+    { headerName: "Emp Id", field: "id", width: 120, filter: true },
     {
       headerName: "NAME",
       valueGetter: function (params) {
@@ -474,7 +473,7 @@ const AllEmployees = (props) => {
       sortable: true,
     },
     { headerName: "EMAIL", field: "email" },
-    { headerName: "ROLE", field: "role", width: "130px" },
+    { headerName: "ROLE", field: "role", width: 130 },
     {
       headerName: "DESIGNATION",
       field: "designation",
@@ -483,28 +482,28 @@ const AllEmployees = (props) => {
     },
     { headerName: "DEPARTMENT", field: "department" },
     { headerName: "QUALIFICATIONS", field: "qualifications" },
-    { headerName: "JOINING DATE", field: "joiningDate", width: "150px" },
-    { headerName: "DOB", field: "dob", width: "120px" },
+    { headerName: "JOINING DATE", field: "joiningDate", width: 150 },
+    { headerName: "DOB", field: "dob", width: 120 },
     {
       headerName: "GENDER",
       field: "gender",
-      width: "150px",
+      width: 150,
       cellStyle: { display: "flex", "justify-content": "center" },
     },
     {
       headerName: "BLOOD GROUP",
       field: "bloodGroup",
-      width: "150px",
+      width: 150,
       cellStyle: { display: "flex", "justify-content": "center" },
       filter: true,
     },
-    { headerName: "MOBILE NO", field: "mobileNo", width: "130px" },
+    { headerName: "MOBILE NO", field: "mobileNo", width: 130 },
     { headerName: "LOCATION", field: "location", filter: true },
   ];
 
   const defaultColDef = useMemo(
     () => ({
-      cellStyle: { "font-size": "16px" },
+      cellStyle: { "fontSize": "16px" },
     }),
     []
   );

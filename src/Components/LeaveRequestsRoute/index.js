@@ -157,6 +157,7 @@ class LeaveRequestsRoute extends Component {
         },
         filter: true,
         sortable: true,
+      
       },
       { name: "Start Date", field: "startDate" },
       { name: "End Date", field: "endDate" },

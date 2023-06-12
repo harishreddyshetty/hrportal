@@ -48,14 +48,130 @@ const LeaveHistoryTable = () => {
 
     // Retrieve employee data from an API or any data source
     const employees = [
+      
+      
+        
       {
         empId:"OS003",
         startDate: "01-01-2023",
         endDate: "08-05-2001",
         leaveDays: "12",
-        status: "Rejected",
-        rejectionReason: "You already took for leave this month",
-      },
+        status: "Accepted",
+        rejectionReason: "DO WFH",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },{
+        empId:"OS003",
+        startDate: "01-01-2023",
+        endDate: "08-05-2001",
+        leaveDays: "12",
+        status: "Accepted",
+        rejectionReason: "-",
+      },  
+               
       {
         empId:"OS003",
         startDate: "01-01-2023",

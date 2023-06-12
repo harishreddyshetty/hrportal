@@ -51,7 +51,7 @@
   font-size: 22px;
   padding: 20px;
   right: 5%;
-  top:10%;
+  top:20%;
   bottom: 10%;
   box-shadow: 4px 4px 18px rgba(0, 0, 0, 0.2);
   z-index: 9999;
@@ -59,7 +59,7 @@
  
 }
 
-@media (max-width: 576px) {
+@media (max-width: 600px) {
   .modal-container {
     position: absolute;
     background-color: white;
@@ -67,9 +67,12 @@
     height: 600px;
     left: 5%;
     right: 5%;
-    top: 5%;
+    top: 20%;
     bottom: 5%;
     box-shadow: 4px 4px 18px rgba(0, 0, 0, 0.2);
+  }
+  .widget-card{
+    margin: 15px;
   }
  
 }

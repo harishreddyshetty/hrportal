@@ -2,14 +2,8 @@ p{
     font-size: 20px;
     font-family: bold;
 }
-.loader-container{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-.avatar{
+
+/* .avatar{
     height: 50px;
     width: 50px;
     border-radius: 50%;
@@ -20,27 +14,27 @@ p{
     font-family: Roboto;
     text-align: center;
     margin-top:15px;
-}
+} */
 .display-bold{
     font-weight: 800;
     font-family: serif;
 
 }
-.employee-navbar-container{
+/* .employee-navbar-container{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center; 
-}
+} */
 .employee-container{
     background-color: aliceblue;
     max-height: 100%;
     min-height: 100vh;
 }
-.company-logo-header{
+/* .company-logo-header{
     width:180px;
     
-  }
+  } */
 
 span{
     width: 210px;

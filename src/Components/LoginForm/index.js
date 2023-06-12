@@ -50,10 +50,14 @@ const LoginForm = () => {
         console.log(backendEndpoint)
         const response = await axios.post(
 <<<<<<< HEAD
+<<<<<<< HEAD
           `${backendEndpoint}/login`,
 =======
           `${backendEndpoint}/authentication`,
 >>>>>>> 4585445 (Created LeaveForm component)
+=======
+          `${backendEndpoint}/login`,
+>>>>>>> 4828435 (added widget cards and  sliding modal)
           {
             email,
             password,

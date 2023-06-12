@@ -13,24 +13,35 @@ const EmployeeDetails = () => {
   };
   useEffect(() => {
     const fetchData = async () => {
+      
       try {
+        const loginDetails=JSON.parse(localStorage.getItem("loginDetails"))
+        const jwtToken=loginDetails.details.jwt_token
+        console.log(jwtToken)
+        const options={
+          method:"GET",
+          headers:{
+            Authorization:`bearer ${jwtToken}`
+          }
+        }
         const response = await fetch(
-          `${backendEndpoint}/employee/santosh.naruje@openskale.com`
+          `${backendEndpoint}/employee/santosh.naruje@openskale.com`,options
         
         );
-
+        if(response.status===200){
         const data = await response.json();
 
         setEmployeeData(data);
         setLoading(false);
         setShowProfile(true);
+        }
       } catch (error) {
         console.error("Error fetching employee data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [backendEndpoint]);
 
   return (
     <div className="employee-container d-flex flex-column">

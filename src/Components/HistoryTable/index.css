@@ -1,0 +1,28 @@
+.approve-rej-btn {
+    width: 136px;
+    height: 35px;
+    border: 0px none;
+    border-radius: 5px;
+    text-align: center;
+    background-color: red;
+    font-size: 16px;
+    color: white;
+}
+
+.ag-header-cell-text {
+    overflow: visible;
+    font-weight: 800;
+    color: #37517d;
+    font-size: 22px;
+}
+
+.ag-cell,
+.ag-full-width-row .ag-cell-wrapper.ag-row-group {
+    font-size: 17px;
+}
+
+.history-container {
+    height: 50vh;
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+}

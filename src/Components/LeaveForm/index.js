@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {v4 as uuid} from "uuid"
+import {format} from "date-fns"
 import "./index.css";
 
 const LeaveForm = ({leaveApplied}) => {
@@ -9,7 +11,7 @@ const LeaveForm = ({leaveApplied}) => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [leaveDays, setLeaveDays] = useState(0);
   const [isLeaveApplied, setIsLeaveApplied] = useState(false);
-  const email=localStorage.getItem("email")
+  
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -23,36 +25,55 @@ const LeaveForm = ({leaveApplied}) => {
 
       const diffTime = Math.abs(end - start);
       const calculatedLeaveDays =
-        Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+      Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
       setLeaveDays(calculatedLeaveDays);
     } else {
       setLeaveDays(0);
     }
   };
 
+  const leaveAppliedForm=()=>{
+    leaveApplied()
+  }
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    
+   
+    const formattedStartDate = format(dateRange[0], "dd-MM-yyyy");
+    const formattedEndDate = format(dateRange[1], "dd-MM-yyyy");
 
-    const formattedStartDate = dateRange[0]?.toLocaleDateString("en-GB");
-    const formattedEndDate = dateRange[1]?.toLocaleDateString("en-GB");
+    console.log(formattedEndDate)
+    const loginDetails=JSON.parse(localStorage.getItem("loginDetails"))
+    const jwtToken=loginDetails.details.jwt_token
+    const data={
+      id:uuid(),
+      hr_email:hr,
+      employee_email:loginDetails.email,
+      start_date:formattedStartDate,
+      end_date:formattedEndDate,
+      leave_days:leaveDays,
 
-    console.log("HR:", hr);
-    console.log("employeeEmail:",email)
-    console.log("Reason:", reason);
-    console.log("Start Date:", formattedStartDate);
-    console.log("End Date:", formattedEndDate);
-    console.log("Leave Days:", leaveDays);
-  
-    const leaveAppliedForm=()=>{
-      leaveApplied()
+
     }
+    console.log(data)
+    const options={
+      method:"POST",
+      headers:{
+        Authorization:`bearer ${jwtToken}`
+      },
+      body:JSON.stringify(data)
+    }
+
+  
+   
     // Reset form
     setHr("");
     setReason("");
     setDateRange([null, null]);
     setLeaveDays(0);
     setIsLeaveApplied(true);
-    setTimeout(leaveAppliedForm,1000)
+    setTimeout(leaveAppliedForm,500)
     
   };
 
@@ -69,7 +90,7 @@ const LeaveForm = ({leaveApplied}) => {
           selectsRange
           required
           minDate={tomorrow}
-          dateFormat="dd/MM/yyyy"
+          dateFormat="dd-MM-yyyy"
           placeholderText="Select Date Range"
           className="form-control"
         />
@@ -91,7 +112,7 @@ const LeaveForm = ({leaveApplied}) => {
             vikas.voladri@openskale.com
           </option>
           <option value="santhosh.bhumireddy@openskale.com">
-            santhosh@openskale.com
+            sbhumireddy@openskale.com
           </option>
         </select>
       </div>

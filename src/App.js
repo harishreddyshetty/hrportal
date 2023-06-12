@@ -6,6 +6,11 @@ import NotFoundRoute from "./Components/NotFoundRoute";
 import HomeRoute from "./Components/HomeRoute";
 import LeaveRequestsRoute from "./Components/LeaveRequestsRoute";
 import LeaveManagement from "./Components/LeaveManagement";
+import LeaveRequestsRoute from "./Components/HistoryTable";
+import './App.css';
+
+
+
 
 import "./App.css";
 
@@ -33,7 +38,8 @@ function App() {
           }
         />
         <Route exact path="/leavesrequest" element={<LeaveRequestsRoute />} />
-        <Route path="*" element={<NotFoundRoute />} />
+        <Route exact path="/test" element={<LeaveRequestsRoute />} />
+                <Route path="*" element={<NotFoundRoute />} />
       </Routes>
     </Router>
   );

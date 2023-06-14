@@ -1,0 +1,14 @@
+
+
+.popup-content-profile {
+    /* background-color: aliceblue; */
+    background-color: white;
+    padding: 10px 25px 25px 25px;
+    box-shadow: 0px 0px 2px 4px aliceblue;
+    border-radius: 8px;
+    width:fit-content;
+    height:fit-content;
+    margin-right: 2%;
+    /* position:absolute; */
+    
+  }

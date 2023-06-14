@@ -5,7 +5,7 @@ const ProtectedRoute = ({ children }) => {
   return loginDetails ? (
     children
   ) : (
-    <Navigate to="/" />
+    <Navigate to="/login" />
   );
 };
 

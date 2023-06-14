@@ -1,18 +1,25 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import DataTable from "react-data-table-component";
+import { useEffect, useMemo, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import DataTable from "react-data-table-component";
 import { Vortex } from "react-loader-spinner";
-import { BsX, BsFillPersonPlusFill, BsFillPersonFill } from "react-icons/bs";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { HiOutlineClipboardCopy } from "react-icons/hi";
-import { RiLogoutCircleRLine } from "react-icons/ri";
+// import { BsFillPersonPlusFill, BsFillPersonFill } from "react-icons/bs";
+// import { RiLogoutCircleRLine } from "react-icons/ri";
+// import { CopyToClipboard } from "react-copy-to-clipboard";
+// import { HiOutlineClipboardCopy } from "react-icons/hi";
+// import { RiLogoutCircleRLine } from "react-icons/ri";
 import FailureView from "../FailureView";
-//  import AddEmployeePopup from "../AddEmployeePopup"
 
-// import Navbar from '../Navbar';
+import LeftNavBar from "../LeftNavBar";
+import Header from "../Header"
 
-// import IndividualEmployee from "../IndividualEmployee";
+import AddEmployeePopup from "../AddEmployeePopup";
+
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
+
 import "./index.css";
+
 
 const apiStatusConstants = {
   initial: "INITIAL",
@@ -25,40 +32,54 @@ const AllEmployees = (props) => {
   const [employees, setEmployees] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial);
-  const [profileclicked, setIsProfileCLickPopup] = useState(false);
+  // const [profileclicked, setIsProfileCLickPopup] = useState(false);
   const [employeeAdded, setEmployeeAdded] = useState(false);
-  const [inValidDataErrorMsg, setInvalidError] = useState("");
-  const [employeeData, setEmployeeData] = useState({
-    firstName: "",
-    lastName: "",
-    id: "",
-    mobileNo: "",
-    email: "",
-    dob: "",
-    joiningDate: "",
-    gender: "Male",
-    qualifications: "",
-    designation: "",
-    department: "",
-    bloodGroup: "A+",
-    address: "",
-    password: "",
-    role: "Admin",
-  });
+  // const [inValidDataErrorMsg, setInvalidError] = useState("");
+  // const [employeeData, setEmployeeData] = useState({
+  //   firstName: "",
+  //   lastName: "",
+  //   id: "",
+  //   mobileNo: "",
+  //   email: "",
+  //   dob: "",
+  //   joiningDate: "",
+  //   gender: "Male",
+  //   qualifications: "",
+  //   designation: "",
+  //   department: "",
+  //   bloodGroup: "A+",
+  //   address: "",
+  //   password: "",
+  //   role: "Admin",
+  // });
 
- 
-// const [searchValue, setSearchValue] = useState("")
+  // const [clickAddEmploee,setAddEmploee] = useState(false)
 
-  const navigate = useNavigate();
+  // const [searchValue, setSearchValue] = useState("")
+  const backendEndpoint = process.env.REACT_APP_BACKEND_ENDPOINT;
+
+
 
   useEffect(() => {
     fetchEmployees();
-    console.log("fetch called");
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const openPopup = () => {
-    setIsPopupOpen(true);
-  };
+  const toggleIsPopupOpen = () =>{
+    setIsPopupOpen(false)
+  }
+
+  const UpdateEmpAdded = () => {
+    setEmployeeAdded(true)
+  }
+
+ 
+
+  // const openPopup = () => {
+  //   setIsPopupOpen(true);
+  //   setIsProfileCLickPopup(false);
+  // };
 
   const closePopup = () => {
     setIsPopupOpen(false);
@@ -66,9 +87,17 @@ const AllEmployees = (props) => {
 
   const fetchEmployees = async () => {
     try {
-      console.log("entered fetchemployees");
       setApiStatus(apiStatusConstants.inProgress);
-      const response = await fetch("http://192.168.0.158:8000/employees");
+      const loginData = JSON.parse(localStorage.getItem("loginDetails"));
+      const jwtToken = loginData.details.jwt_token;
+
+      const options = {
+        method: "GET",
+        headers: {
+          Authorization: `bearer ${jwtToken}`,
+        },
+      };
+      const response = await fetch(`${backendEndpoint}/employees`, options);
       const data = await response.json();
 
       const updatedData = await data.map((employee) => ({
@@ -105,318 +134,324 @@ const AllEmployees = (props) => {
   };
 
   // on submit add employee form
-  const handleAddEmployeeForm = async (e) => {
-    const {
-      firstName,
-      lastName,
-      id,
-      mobileNo,
-      email,
-      dob,
-      joiningDate,
-      qualifications,
-      designation,
-      department,
-      address,
-      bloodGroup,
-      gender,
-      role,
-      password,
-    } = employeeData;
+  // const handleAddEmployeeForm = async (e) => {
+  //   const {
+  //     firstName,
+  //     lastName,
+  //     id,
+  //     mobileNo,
+  //     email,
+  //     dob,
+  //     joiningDate,
+  //     qualifications,
+  //     designation,
+  //     department,
+  //     address,
+  //     bloodGroup,
+  //     gender,
+  //     role,
+  //     password,
+  //   } = employeeData;
 
-    e.preventDefault();
+  //   e.preventDefault();
 
-    const options = {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        first_name: firstName,
-        last_name: lastName,
-        id: id,
-        mobile_number: mobileNo,
-        email: email,
-        date_of_birth: dob,
-        joining_date: joiningDate,
-        qualifications: qualifications,
-        designation: designation,
-        gender: gender,
-        department: department,
-        address: address,
-        blood_group: bloodGroup,
-        password: password,
-        role: role,
-      }),
-    };
+  //   const options = {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       first_name: firstName,
+  //       last_name: lastName,
+  //       id: id,
+  //       mobile_number: mobileNo,
+  //       email: email,
+  //       date_of_birth: dob,
+  //       joining_date: joiningDate,
+  //       qualifications: qualifications,
+  //       designation: designation,
+  //       department: department,
+  //       address: address,
+  //       blood_group: bloodGroup,
+  //       gender: gender,
+  //       password: password,
+  //       role: role,
+  //     }),
+  //   };
 
-    const response = await fetch(
-      "http://192.168.0.158:8000/create_employee",
-      options
-    );
+  //   console.log({
+  //     first_name: firstName,
+  //     last_name: lastName,
+  //     id: id,
+  //     mobile_number: mobileNo,
+  //     email: email,
+  //     date_of_birth: dob,
+  //     joining_date: joiningDate,
+  //     qualifications: qualifications,
+  //     designation: designation,
+  //     department: department,
+  //     address: address,
+  //     blood_group: bloodGroup,
+  //     gender: gender,
+  //     password: password,
+  //     role: role,
+  //   });
 
-    // const response = {status:200}
+  //   const response = await fetch(`${backendEndpoint}/create_employee`, options);
+  //   console.log(response,"response on form submittion")
 
-    if (response.status === 200) {
-      setIsPopupOpen(false);
-      setEmployeeAdded(true);
-      hideNotification();
-      fetchEmployees();
-    } else {
-      const data = await response.json();
-      setInvalidError(data.detail);
-    }
-  };
+  //   if (response.status === 200) {
+  //     setIsPopupOpen(false);
+  //     setEmployeeAdded(true);
+  //     hideNotification();
+  //     fetchEmployees();
+  //   } else {
+  //     const data = await response.json();
+  //     setInvalidError(data.detail);
+  //   }
+  // };
 
+  // const onChangeInputs = (e) => {
+  //   setEmployeeData({
+  //     ...employeeData,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
-  const onChangeInputs = (e) => {
-    setEmployeeData({
-      ...employeeData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const onClickProfile = () => {
+  //   setIsProfileCLickPopup((prevState) => !prevState);
+  //   console.log("profile Clicked");
+  // };
 
-  const onClickProfile = () => {
-    setIsProfileCLickPopup((prevState) => !prevState);
-    console.log("profile Clicked");
-  };
+  
 
-  const onClickLogout = () => {
-    localStorage.removeItem("loginDetails");
-    navigate("/");
-  };
+  // add employee form
+  // const popupForm = () => (
+  //   <form className="form-group" onSubmit={handleAddEmployeeForm}>
+  //     <div className="d-flex justify-content-end m-0">
+  //       <button className="close-button" onClick={closePopup}>
+  //         <BsX className="close-icon" />
+  //       </button>
+  //     </div>
 
- 
-// add employee form
-  const popupForm = () => (
-    <form className="form-group" onSubmit={handleAddEmployeeForm}>
-      <div className="d-flex justify-content-end m-0">
-        <button className="close-button" onClick={closePopup}>
-          <BsX className="close-icon" />
-        </button>
-      </div>
+  //     <h3 className="mb-3">Add Employee</h3>
+  //     <div className="add-employee-form-container">
+  //       <div className="input-element-container">
+  //         <p className="labels">First Name*</p>
+  //         <input
+  //           required
+  //           type="text"
+  //           className="input"
+  //           name="firstName"
+  //           onChange={onChangeInputs}
+  //         />
+  //       </div>
 
-      <h3 className="mb-3">Add Employee</h3>
-      <div className="add-employee-form-container">
-        <div className="input-element-container">
-          <p className="labels">First Name*</p>
-          <input
-            required
-            type="text"
-            className="input"
-            name="firstName"
-            onChange={onChangeInputs}
-          />
-        </div>
+  //       <div className="input-element-container">
+  //         <p className="labels">Last Name*</p>
+  //         <input
+  //           required
+  //           type="text"
+  //           className="input"
+  //           name="lastName"
+  //           onChange={onChangeInputs}
+  //         />
+  //       </div>
 
-        <div className="input-element-container">
-          <p className="labels">Last Name*</p>
-          <input
-            required
-            type="text"
-            className="input"
-            name="lastName"
-            onChange={onChangeInputs}
-          />
-        </div>
+  //       <div className="input-element-container">
+  //         <p className="labels">ID*</p>
+  //         <input
+  //           // readOnly
+  //           required
+  //           type="text"
+  //           className="input"
+  //           name="id"
+  //           onChange={onChangeInputs}
+  //         />
+  //       </div>
 
-        <div className="input-element-container">
-          <p className="labels">ID*</p>
-          <input
-            // readOnly
-            required
-            type="text"
-            className="input"
-            name="id"
-            onChange={onChangeInputs}
-          />
-        </div>
+  //       <div className="input-element-container">
+  //         <p className="labels"> Email*</p>
+  //         <input
+  //           required
+  //           type="text"
+  //           className="input"
+  //           name="email"
+  //           onChange={onChangeInputs}
+  //         />
+  //       </div>
 
-        <div className="input-element-container">
-          <p className="labels"> Email*</p>
-          <input
-            required
-            type="text"
-            className="input"
-            name="email"
-            onChange={onChangeInputs}
-          />
-        </div>
+  //       <div className="input-element-container">
+  //         <p className="labels"> Role*</p>
+  //         <select
+  //           name="role"
+  //           onChange={onChangeInputs}
+  //           className="select-element"
+  //         >
+  //           <option value="Admin">Admin</option>
+  //           <option value="Employee">Employee</option>
+  //         </select>
+  //       </div>
 
-        <div className="input-element-container">
-          <p className="labels"> Role*</p>
-          <select
-            name="role"
-            onChange={onChangeInputs}
-            className="select-element"
-          >
-            <option value="Admin">Admin</option>
-            <option value="Employee">Employee</option>
-          </select>
-        </div>
+  //       <div className="input-element-container justify-content-space-between">
+  //         <div className="d-flex align-items-center justify-content-between">
+  //           <p className="labels">Password*</p>
+  //           <CopyToClipboard text={employeeData.password}>
+  //             <span>
+  //               <HiOutlineClipboardCopy className="copy-icon" />
+  //             </span>
+  //           </CopyToClipboard>
+  //         </div>
 
-        <div className="input-element-container justify-content-space-between">
-          <div className="d-flex align-items-center justify-content-between">
-            <p className="labels">Password*</p>
-            <CopyToClipboard text={employeeData.password}>
-              <span>
-                <HiOutlineClipboardCopy className="copy-icon" />
-              </span>
-            </CopyToClipboard>
-          </div>
+  //         <input
+  //           required
+  //           type="text"
+  //           className="input"
+  //           name="password"
+  //           onChange={onChangeInputs}
+  //         />
+  //       </div>
 
-          <input
-            required
-            type="text"
-            className="input"
-            name="password"
-            onChange={onChangeInputs}
-          />
-        </div>
+  //       <div className="input-element-container">
+  //         <p className="labels">Date of Birth*</p>
+  //         <input
+  //           required
+  //           type="date"
+  //           className="dateElement"
+  //           name="dob"
+  //           onChange={onChangeInputs}
+  //         />
+  //       </div>
 
-        <div className="input-element-container">
-          <p className="labels">Date of Birth*</p>
-          <input
-            required
-            type="date"
-            className="dateElement"
-            name="dob"
-            onChange={onChangeInputs}
-          />
-        </div>
+  //       <div className="input-element-container">
+  //         <p className="labels">Joining Date*</p>
+  //         <input
+  //           required
+  //           type="date"
+  //           className="dateElement"
+  //           name="joiningDate"
+  //           onChange={onChangeInputs}
+  //         />
+  //       </div>
 
-        <div className="input-element-container">
-          <p className="labels">Joining Date*</p>
-          <input
-            required
-            type="date"
-            className="dateElement"
-            name="joiningDate"
-            onChange={onChangeInputs}
-          />
-        </div>
+  //       <div className="input-element-container">
+  //         <p className="labels">Qualifications*</p>
+  //         <input
+  //           required
+  //           type="text"
+  //           className="input"
+  //           name="qualifications"
+  //           onChange={onChangeInputs}
+  //         />
+  //       </div>
 
-        <div className="input-element-container">
-          <p className="labels">Qualifications*</p>
-          <input
-            required
-            type="text"
-            className="input"
-            name="qualifications"
-            onChange={onChangeInputs}
-          />
-        </div>
+  //       <div className="input-element-container">
+  //         <p className="labels">Department*</p>
+  //         <input
+  //           required
+  //           type="text"
+  //           className="input"
+  //           name="department"
+  //           onChange={onChangeInputs}
+  //         />
+  //       </div>
 
-        <div className="input-element-container">
-          <p className="labels">Department*</p>
-          <input
-            required
-            type="text"
-            className="input"
-            name="department"
-            onChange={onChangeInputs}
-          />
-        </div>
+  //       <div className="input-element-container">
+  //         <p className="labels">Gender*</p>
+  //         {/* <input type="input" className="input" name='gender' onChange={onChangeInputs} /> */}
 
-        <div className="input-element-container">
-          <p className="labels">Gender*</p>
-          {/* <input type="input" className="input" name='gender' onChange={onChangeInputs} /> */}
+  //         <select
+  //           className="select-element"
+  //           name="gender"
+  //           onChange={onChangeInputs}
+  //         >
+  //           <option value="Male">Male</option>
+  //           <option value="Female">Female</option>
+  //         </select>
+  //       </div>
 
-          <select
-            className="select-element"
-            name="gender"
-            onChange={onChangeInputs}
-          >
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
+  //       <div className="input-element-container">
+  //         <p className="labels">Mobile No*</p>
+  //         <input
+  //           required
+  //           type="tel"
+  //           className="input"
+  //           name="mobileNo"
+  //           onChange={onChangeInputs}
+  //           maxLength="10"
+  //           pattern="[0-9]{10}"
+  //         />
+  //       </div>
 
-        <div className="input-element-container">
-          <p className="labels">Mobile No*</p>
-          <input
-            required
-            type="tel"
-            className="input"
-            name="mobileNo"
-            onChange={onChangeInputs}
-            maxLength="10"
-            pattern="[0-9]{10}"
-          />
-        </div>
+  //       <div className="input-element-container">
+  //         <p className="labels" htmlFor="address">
+  //           Blood Group*
+  //         </p>
 
-        <div className="input-element-container">
-          <p className="labels" htmlFor="address">
-            Blood Group*
-          </p>
-          {/* <input type="text" className="input" name='bloodGroup' onChange={onChangeInputs} /> */}
+  //         <select
+  //           className="select-element"
+  //           name="bloodGroup"
+  //           onChange={onChangeInputs}
+  //         >
+  //           <option className="option-bg" value="A+">
+  //             A+
+  //           </option>
+  //           <option value="B+">B+</option>
+  //           <option value="AB+">AB+</option>
+  //           <option value="O+">O+</option>
+  //           <option value="A-">A-</option>
+  //           <option value="B-">B-</option>
+  //           <option value="AB-">AB-</option>
+  //           <option value="O-">O-</option>
+  //         </select>
+  //       </div>
 
-          <select
-            className="select-element"
-            name="bloodGroup"
-            onChange={onChangeInputs}
-          >
-            <option className="option-bg" value="A+">
-              A+
-            </option>
-            <option value="B+">B+</option>
-            <option value="AB+">AB+</option>
-            <option value="O+">O+</option>
-            <option value="A-">A-</option>
-            <option value="B-">B-</option>
-            <option value="AB-">AB-</option>
-            <option value="O-">O-</option>
-          </select>
-        </div>
+  //       <div className="input-element-container">
+  //         <p className="labels" htmlFor="designation">
+  //           Designation*
+  //         </p>
+  //         <input
+  //           required
+  //           type="text"
+  //           className="input"
+  //           name="designation"
+  //           onChange={onChangeInputs}
+  //         />
+  //       </div>
 
-        <div className="input-element-container">
-          <p className="labels" htmlFor="designation">
-            Designation*
-          </p>
-          <input
-            required
-            type="text"
-            className="input"
-            name="designation"
-            onChange={onChangeInputs}
-          />
-        </div>
+  //       <div>
+  //         <p className="labels">Location*</p>
+  //         <input
+  //           required
+  //           type="text"
+  //           className="input"
+  //           name="address"
+  //           onChange={onChangeInputs}
+  //         />
+  //       </div>
+  //     </div>
 
-        <div>
-          <p className="labels">Location*</p>
-          <input
-            required
-            type="text"
-            className="input"
-            name="address"
-            onChange={onChangeInputs}
-          />
-        </div>
-      </div>
+  //     {inValidDataErrorMsg.length > 0 && (
+  //       <p className="add-emp-invalid">*{inValidDataErrorMsg}</p>
+  //     )}
 
-      {inValidDataErrorMsg.length > 0 && (
-        <p className="add-emp-invalid">*{inValidDataErrorMsg}</p>
-      )}
+  //     <button type="submit" className="mt-3 submit-btn">
+  //       Submit
+  //     </button>
+  //   </form>
+  // );
 
-      <button type="submit" className="mt-3 submit-btn">
-        Submit
-      </button>
-    </form>
-  );
+  // popup on clicking profile icon
+  // const profilePopup = () => {
+  //   return (
+  //     <div>
+  //       <Link to="/employee">
+  //         <p className="mb-0">Your Profile</p>
+  //       </Link>
 
-
-// popup on clicking profile icon
-  const profilePopup = () => {
-    return (
-      <div>
-        <p className="mb-0">Your Profile</p>
-        <button className="logout-btn mt-0" onClick={onClickLogout}>
-          Logout
-        </button>
-      </div>
-    );
-  };
-
+  //       <button className="logout-btn mt-0" onClick={onClickLogout}>
+  //         Logout
+  //       </button>
+  //     </div>
+  //   );
+  // };
 
   const noDataDisplay = () => (
     <div className="d-flex flex-column justify-content-center align-items-center">
@@ -430,9 +465,8 @@ const AllEmployees = (props) => {
     </div>
   );
 
-
   const renderLoadingView = () => (
-    <div className="tailspin d-flex flex-column align-items-center justify-content-center">
+    <div className="tailspin d-flex flex-column align-items-center justify-content-center loader-container">
       <Vortex
         visible={true}
         height="80"
@@ -452,109 +486,83 @@ const AllEmployees = (props) => {
     </div>
   );
 
-  // const renderTable = () => (
-  //   <table>
-  //     <thead>
-  //       <tr>
-  //         <th>Emp Id</th>
-  //         <th>NAME</th>
-  //         <th>EMAIL</th>
-  //         <th>Role</th>
-  //         <th>DESIGNATION</th>
-  //         <th>DEPARTMENT</th>
-  //         <th>QUALIFICATIONS</th>
-  //         <th>JOININGDATE</th>
-  //         <th>DOB</th>
-  //         <th>GENDER</th>
-  //         <th>BLOOD GROUP</th>
-  //         <th>MOBILE NO</th>
-  //         <th>ADDRESS</th>
-  //       </tr>
-  //     </thead>
-  //     <tbody>
-  //       {employees.map((employee) => (
-  //         <IndividualEmployee data={employee} key={employee.id} />
-  //       ))}
-  //     </tbody>
-  //   </table>
-  // );
-
-  
-
-  // cell: row => <div style={{fontSize: 16}}>{row.id}</div>
-
-  const columns = [
-    { name: "Emp Id", selector: (row) => row.id ,sortable: true},
-    { name: "NAME", selector: (row) => row.firstName },
-    { name: "EMAIL", selector: (row) => row.email , width:"300px",},
-    { name: "ROLE", selector: (row) => row.role },
-    { name: "DESIGNATION", selector: (row) => row.designation },
-    { name: "DEPARTMENT", selector: (row) => row.department },
-    { name: "QUALIFICATIONS", selector: (row) => row.qualifications },
-    { name: "JOINING DATE", selector: (row) => row.joiningDate },
-    { name: "DOB", selector: (row) => row.dob },
-    { name: "GENDER", selector: (row) => row.gender },
-    { name: "BLOOD GROUP", selector: (row) => row.bloodGroup },
-    { name: "MOBILE NO", selector: (row) => row.mobileNo },
-    { name: "LOCATION", selector: (row) => row.location },
+  const columnDefs = [
+    { headerName: "Emp Id", field: "id", width: 120, filter: true },
+    {
+      headerName: "NAME",
+      valueGetter: function (params) {
+        const firstName = params.data.firstName;
+        const lastName = params.data.lastName;
+        const combinedData = firstName + " " + lastName;
+        return combinedData;
+      },
+      filter: true,
+      sortable: true,
+    },
+    { headerName: "EMAIL", field: "email" },
+    { headerName: "ROLE", field: "role", width: 130 },
+    {
+      headerName: "DESIGNATION",
+      field: "designation",
+      width: 200,
+      filter: true,
+    },
+    { headerName: "DEPARTMENT", field: "department" },
+    { headerName: "QUALIFICATIONS", field: "qualifications" },
+    { headerName: "JOINING DATE", field: "joiningDate", width: 150 },
+    { headerName: "DOB", field: "dob", width: 120 },
+    {
+      headerName: "GENDER",
+      field: "gender",
+      width: 150,
+      cellStyle: { display: "flex", justifyContent: "center" },
+    },
+    {
+      headerName: "BLOOD GROUP",
+      field: "bloodGroup",
+      width: 150,
+      cellStyle: { display: "flex", justifyContent: "center" },
+      filter: true,
+    },
+    { headerName: "MOBILE NO", field: "mobileNo", width: 130 },
+    { headerName: "LOCATION", field: "location", filter: true },
   ];
 
-  const customStyles = {
-    rows: {
-      style: {
-        // Style for table rows
-        fontSize: "16px",
-        minHeight: "48px", // Set the height of the rows
-      },
-    },
-    headCells: {
-      style: {
-        // Style for table header cells
-        fontSize: "16px",
-        fontWeight: "bold",
-        paddingLeft: "16px",
-        paddingRight: "16px",
-      },
-    },
-    cells: {
-      style: {
-        // Style for table cells
-        paddingLeft: "16px",
-        paddingRight: "16px",
-      },
-    },
-  };
-
-  // const onChangeSearch = (e) =>{
-  //   setSearchValue(e.target.value)
-  //   const CopyOfEmployees = employees.slice(0)
-  //   console.log(CopyOfEmployees,"copy")
-  //     const filteredData = CopyOfEmployees.filter(eachEmp => eachEmp.firstName.toLowerCase().includes(e.target.value.toLowerCase()))
-  //     console.log(filteredData,"filtered")
-  //     setEmployees(filteredData)
-    
-  // }
-
-  const renderTable = () => (
-    <div className="data-table-container">
-      <DataTable
-        title="All Employees"
-        customStyles={customStyles}
-        selectableRows
-        highlightOnHover
-        selectableRowsHighlight
-        columns={columns}
-        data={employees}
-        pagination
-        subHeader
-        // subHeaderComponent = {
-        //   <input type="search" placeholder="Search Name" className="search-input" onChange={onChangeSearch}/>
-        // }
-      />
-    </div>
+  const defaultColDef = useMemo(
+    () => ({
+      cellStyle: { fontSize: "16px" },
+    }),
+    []
   );
 
+  const paginationPageSize = 10;
 
+  const onClickAddEmployee = () => {
+    setIsPopupOpen(true)
+  }
+
+  const renderTable = () => (
+    <div
+      className="ag-theme-alpine"
+      style={{
+        height: "70vh",
+        width: "85vw",
+        fontSize: "16px",
+        marginLeft: "20px",
+      }}
+    >
+      <h3 className="text-center mb-3 ">All Employees</h3>
+      <button type="button" className="add-employee-btn" onClick={onClickAddEmployee}>Add Employee</button>
+      <AgGridReact
+        title="All Employees"
+        columnDefs={columnDefs}
+        rowData={employees}
+        pagination={true}
+        paginationPageSize={paginationPageSize}
+        defaultColDef={defaultColDef}
+      ></AgGridReact>
+    </div>
+  );
 
   const renderEmployeeTable = () => (
     <div className="mt-5 table-container">
@@ -577,60 +585,32 @@ const AllEmployees = (props) => {
     }
   };
 
-
-  
   return (
-    <div className="d-flex flex-column  mt-0 all-employees-container">
-      <nav className="header-container">
-        <img
-          className="company-logo-header"
-          src="https://i.postimg.cc/kX5s4kWg/Openscale-Technologies-D6-CV.png"
-          alt="logo"
-        />
-        <div className="header-elements-right">
-          <button className="add-employee-btn" onClick={openPopup}>
-            Add Employee
-          </button>
+    <>
+    <Header/>
+     <div className="d-flex flex-column  mt-0 all-employees-container">
+      <div className="d-flex ">
+        <LeftNavBar />
+        <div>{renderAllEmployeesPage()}</div>
+      </div>
 
-          <button
-            onClick={openPopup}
-            className="add-employee-icon-btn d-flex justify-content-center align-items-center d-md-none"
-          >
-            <BsFillPersonPlusFill className="add-employee-icon" />
-          </button>
-
-          <button
-            onClick={onClickLogout}
-            className="logout-icon-btn d-flex justify-content-center align-items-center d-md-none"
-          >
-            <RiLogoutCircleRLine className="add-employee-icon" />
-          </button>
-
-          {/* onClick={onClickProfile} */}
-
-          <button onClick={onClickProfile} className="profile-icon-container">
-            <BsFillPersonFill size="30px" color="white" />
-          </button>
-        </div>
-      </nav>
-
-      {renderAllEmployeesPage()}
-
-      <div id="addEmployeeForm">
+      {/* <div id="addEmployeeForm">
         {isPopupOpen && (
           <div className="popup-overlay">
             <div className="popup-content">{popupForm()}</div>
           </div>
         )}
-      </div>
+      </div> */}
 
-      <div id="optionsPopup">
+      {isPopupOpen && <AddEmployeePopup popupClose={closePopup} fetchEmployees={fetchEmployees} popupOpen={isPopupOpen} hideNotification={hideNotification} toggleIsPopupOpen = {toggleIsPopupOpen} UpdateEmpAdded={UpdateEmpAdded}/>}
+
+      {/* <div id="optionsPopup">
         {profileclicked && (
           <div className="popup-overlay-profile d-flex justify-content-end">
             <div className="popup-content-profile">{profilePopup()}</div>
           </div>
         )}
-      </div>
+      </div> */}
 
       <div id="successfulNotificationPopup">
         {employeeAdded && (
@@ -642,6 +622,9 @@ const AllEmployees = (props) => {
         )}
       </div>
     </div>
+    
+    </>
+   
   );
 };
 

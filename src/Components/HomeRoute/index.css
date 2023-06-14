@@ -1,0 +1,23 @@
+.home-page-container{
+    width:60vw;
+    display: flex;
+    flex-wrap: wrap;
+   /* background-color: beige; */
+}
+
+.main-container{
+    height: 95vh;
+    width:95vw
+    
+}
+
+.details-container{
+    height:300px;
+    width:500px;
+    border-radius: 8px;
+    margin:10px 10px 10px 10px;
+}
+
+.remove-underline{
+    text-decoration: none;
+}

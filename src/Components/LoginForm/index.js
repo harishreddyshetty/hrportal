@@ -10,11 +10,7 @@ const LoginForm = () => {
   const [passwordError, setPasswordError] = useState("");
   const [errMsg, setErrMsg] = useState(false);
   const [errMsgDisplay, setErrMsgDisplay] = useState("Something Went Wrong");
-<<<<<<< HEAD
   const backendEndpoint = process.env.REACT_APP_BACKEND_ENDPOINT;
-=======
-  const backendEndpoint=process.env.REACT_APP_BACKEND_ENDPOINT
->>>>>>> 4585445 (Created LeaveForm component)
 
   const navigate = useNavigate();
 
@@ -49,15 +45,7 @@ const LoginForm = () => {
       try {
         console.log(backendEndpoint)
         const response = await axios.post(
-<<<<<<< HEAD
-<<<<<<< HEAD
           `${backendEndpoint}/login`,
-=======
-          `${backendEndpoint}/authentication`,
->>>>>>> 4585445 (Created LeaveForm component)
-=======
-          `${backendEndpoint}/login`,
->>>>>>> 4828435 (added widget cards and  sliding modal)
           {
             email,
             password,

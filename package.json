@@ -6,14 +6,9 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-<<<<<<< HEAD
     "ag-grid-community": "^29.3.5",
     "ag-grid-enterprise": "^29.3.5",
     "ag-grid-react": "^29.3.5",
-=======
-    "ag-grid-community": "^30.0.0",
-    "ag-grid-react": "^30.0.0",
->>>>>>> 4828435 (added widget cards and  sliding modal)
     "axios": "^1.4.0",
     "date-fns": "^2.30.0",
     "react": "^18.2.0",
@@ -24,12 +19,8 @@
     "react-loader-spinner": "^5.3.4",
     "react-router-dom": "^6.11.2",
     "react-scripts": "5.0.1",
-<<<<<<< HEAD
     "reactjs-popup": "^2.0.5",
     "styled-components": "^6.0.0-rc.3",
-=======
-    "uuid": "^9.0.0",
->>>>>>> 4828435 (added widget cards and  sliding modal)
     "web-vitals": "^2.1.4"
   },
   "scripts": {

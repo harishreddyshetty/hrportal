@@ -1,5 +1,5 @@
 // import DataTable from "react-data-table-component";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
@@ -7,19 +7,69 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import "./index.css";
 
-const LeaveHistoryTable = () => {
+const LeaveHistoryTable = ({leaveCancelled}) => {
   const [rowData, setRowData] = useState([]);
+  const backendEndpoint = process.env.REACT_APP_BACKEND_ENDPOINT;
 
-  const handleButtonClick = (params) => {
+  const handleButtonClick = async (params) => {
     // Handle button click for the row
     console.log(params);
+    try{
+      const options={
+        method:"DELETE",
+      }
+    const response=await fetch(`${backendEndpoint}/delete_leave/${params}`,options)
+    if(response.status===200){
+      console.log(leaveCancelled)
+      console.log("Leave Delete Applied Succesfully")
+      leaveCancelled();
+      
+    }
+    }
+    catch(err){
+      console.log(err)
+    }
+
   };
 
+
+  useEffect(() => {
+    fetchLeaveHistory(); // eslint-disable-next-line
+  }, []);
+
+  const fetchLeaveHistory = async () => {
+    try {
+      const loginDetails=JSON.parse(localStorage.getItem("loginDetails"))
+      const id=loginDetails.details.response.id;
+      const response = await fetch(
+        `${backendEndpoint}/leaves/${id}`
+      );
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log(data)
+        const camelCaseData = await data.map((leave) => {
+          return {
+            empId: leave.employee_id,
+            startDate: leave.start_date,
+            endDate: leave.end_date,
+            status: leave.status,
+            rejectionReason: leave.rejected_reason,
+            leaveId: leave.leave_id,
+            leaveDays: leave.days,
+          };
+        });
+        setRowData(camelCaseData);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const columnDefs = [
-    { headerName: "EMP ID", field: "empId",},
-    { headerName: "START DATE", field: "startDate",},
+    // { headerName: "EMP ID", field: "empId" },
+    { headerName: "LEAVE ID", field: "leaveId" },
+    { headerName: "START DATE", field: "startDate" },
     { headerName: "END DATE", field: "endDate" },
-    { headerName: "LEAVE DAYS", field: "leaveDays"},
+    { headerName: "LEAVE DAYS", field: "leaveDays" },
     { headerName: "STATUS", field: "status" },
     { headerName: "REJECTION REASON", field: "rejectionReason" },
     {
@@ -31,216 +81,21 @@ const LeaveHistoryTable = () => {
           return (
             <button
               className="approve-rej-btn d-flex  justify-content-center align-items-center"
-              onClick={() => handleButtonClick(params)}
+              onClick={() => handleButtonClick(params.data.leaveId)}
             >
               Cancel Leave
             </button>
           );
         }
-        return "N/A"
+        return "N/A";
       },
     },
   ];
 
-  const onGridReady = (params) => {
-    // Store grid API instance
-    //const gridApi = params.api;
-
-    // Retrieve employee data from an API or any data source
-    const employees = [
-      
-      
-        
-      {
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "DO WFH",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },{
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },  
-               
-      {
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Accepted",
-        rejectionReason: "-",
-      },
-      {
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "12",
-        status: "Rejected",
-        rejectionReason: "You already took for leave this month",
-      },
-      {
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "1",
-        status: "Rejected",
-        rejectionReason: "You already took for leave this month",
-      },
-      {
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "1",
-        status: "Accepted",
-        rejectionReason: "-",
-      },
-      {
-        empId:"OS003",
-        startDate: "01-01-2023",
-        endDate: "08-05-2001",
-        leaveDays: "1",
-        status: "Pending",
-        rejectionReason: "-",
-      },
-
-      // Add more employees as needed
-    ];
-
-    // Set employee data to the grid
-    setRowData(employees);
-
-    // Auto-size columns to fit the grid width
-   // gridApi.sizeColumnsToFit();
-  };
-
- 
-  
-
   return (
-  
-    <div
-      className="ag-theme-alpine history-container" 
-     
-    >
-      <AgGridReact
-        rowData={rowData}
-        columnDefs={columnDefs}
-        onGridReady={onGridReady}
-        
-        
-      ></AgGridReact>
+    <div className="ag-theme-alpine history-container">
+      <AgGridReact rowData={rowData} columnDefs={columnDefs}></AgGridReact>
     </div>
-
   );
 };
 

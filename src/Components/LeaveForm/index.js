@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {v4 as uuid} from "uuid"
-import {format} from "date-fns"
+import {v4 as uuid } from "uuid";
+import { format } from "date-fns";
 import "./index.css";
 
-const LeaveForm = ({leaveApplied}) => {
+const LeaveForm = ({ leaveApplied }) => {
   const [hr, setHr] = useState("");
   const [reason, setReason] = useState("");
   const [dateRange, setDateRange] = useState([null, null]);
   const [leaveDays, setLeaveDays] = useState(0);
-  const [isLeaveApplied, setIsLeaveApplied] = useState(false);
-  
+  const [success,setSuccess]=useState(false);
+  const [err,setErr]=useState(false)
+
+  const backendEndpoint = process.env.REACT_APP_BACKEND_ENDPOINT;
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -24,57 +26,78 @@ const LeaveForm = ({leaveApplied}) => {
       const end = new Date(dates[1].setHours(0, 0, 0, 0));
 
       const diffTime = Math.abs(end - start);
-      const calculatedLeaveDays =
-      Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+      const calculatedLeaveDays = (Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1);
       setLeaveDays(calculatedLeaveDays);
     } else {
       setLeaveDays(0);
     }
   };
 
-  const leaveAppliedForm=()=>{
-    leaveApplied()
-  }
+  const leaveAppliedForm = () => {
+    leaveApplied();
+  };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
+
+    const formattedStartDate = format(dateRange[0], "yyyy-MM-dd");
+    const formattedEndDate = format(dateRange[1], "yyyy-MM-dd");
+
     
+    const randomId = uuid().substring(2,8);
+
+    
+
    
-    const formattedStartDate = format(dateRange[0], "dd-MM-yyyy");
-    const formattedEndDate = format(dateRange[1], "dd-MM-yyyy");
+    try {
+      const loginDetails = JSON.parse(localStorage.getItem("loginDetails"));
+      const jwtToken = loginDetails.details.jwt_token;
+      const id=loginDetails.details.response.id;
+      const data = {
+        leave_id: randomId,
+        hr_email: hr,
+        employee_email: loginDetails.email,
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+        days: leaveDays,
+        status: "Pending",
+        leave_reason: reason,
+        employee_id:id
+       
+      };
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: ` bearer ${jwtToken}`,
+        },
+        body: JSON.stringify(data),
+      };
+      console.log(options);
 
-    console.log(formattedEndDate)
-    const loginDetails=JSON.parse(localStorage.getItem("loginDetails"))
-    const jwtToken=loginDetails.details.jwt_token
-    const data={
-      id:uuid(),
-      hr_email:hr,
-      employee_email:loginDetails.email,
-      start_date:formattedStartDate,
-      end_date:formattedEndDate,
-      leave_days:leaveDays,
+      const response = await fetch(`${backendEndpoint}/apply_leave`, options);
+      
 
-
+      console.log(response);
+      if (response.status === 200) {
+       setSuccess(true)
+       setErr(false)
+      } else {
+        setSuccess(false)
+        err(true)
+      }
+    } catch (err) {
+      console.log(err);
+      setErr(true)
     }
-    console.log(data)
-    const options={
-      method:"POST",
-      headers:{
-        Authorization:`bearer ${jwtToken}`
-      },
-      body:JSON.stringify(data)
-    }
 
-  
-   
     // Reset form
     setHr("");
     setReason("");
     setDateRange([null, null]);
     setLeaveDays(0);
-    setIsLeaveApplied(true);
-    setTimeout(leaveAppliedForm,500)
-    
+ 
+    setTimeout(leaveAppliedForm, 2000);
   };
 
   return (
@@ -104,7 +127,7 @@ const LeaveForm = ({leaveApplied}) => {
           value={hr}
           onChange={(e) => setHr(e.target.value)}
         >
-          <option value="lead" > Select Your Lead </option>
+          <option value=""> Select Your Lead </option>
           <option value="suresh.salloju@openskale.com">
             suresh.salloju@openskale.com
           </option>
@@ -115,6 +138,7 @@ const LeaveForm = ({leaveApplied}) => {
             sbhumireddy@openskale.com
           </option>
         </select>
+    
       </div>
       <div className="form-group col-lg-9 mb-3">
         <label htmlFor="reason">Reason for Leave:</label>
@@ -127,19 +151,16 @@ const LeaveForm = ({leaveApplied}) => {
           onChange={(e) => setReason(e.target.value)}
         />
       </div>
-      
+
       {leaveDays > 0 && (
-          <p>Number of Leave Days: {leaveDays}</p>
-        )}
+        <p className="leave-days">Number of Leave Days: {leaveDays}</p>
+      )}
+      {success&&<p className="text-success success-msg">Leave Applied Succesfully</p>}
+      {err&&<p className="text-danger">There was an issue while applying Please apply again</p>}
       <div className="form-btn-container">
-        
-        {isLeaveApplied ? (
-          <p className="text-success success-msg">Leave applied successfully</p>
-        ) : (
-          <button type="submit" className="submit-leave-btn">
-            Apply Leave
-          </button>
-        )}
+        <button type="submit" className="submit-leave-btn">
+          Apply Leave
+        </button>
       </div>
     </form>
   );

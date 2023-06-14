@@ -1,25 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import DataTable from "react-data-table-component";
 import { Vortex } from "react-loader-spinner";
-// import { BsFillPersonPlusFill, BsFillPersonFill } from "react-icons/bs";
-// import { RiLogoutCircleRLine } from "react-icons/ri";
-// import { CopyToClipboard } from "react-copy-to-clipboard";
-// import { HiOutlineClipboardCopy } from "react-icons/hi";
-// import { RiLogoutCircleRLine } from "react-icons/ri";
 import FailureView from "../FailureView";
-
 import LeftNavBar from "../LeftNavBar";
-import Header from "../Header"
-
+import Header from "../Header";
 import AddEmployeePopup from "../AddEmployeePopup";
-
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-
 import "./index.css";
-
 
 const apiStatusConstants = {
   initial: "INITIAL",
@@ -32,54 +20,21 @@ const AllEmployees = (props) => {
   const [employees, setEmployees] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial);
-  // const [profileclicked, setIsProfileCLickPopup] = useState(false);
   const [employeeAdded, setEmployeeAdded] = useState(false);
-  // const [inValidDataErrorMsg, setInvalidError] = useState("");
-  // const [employeeData, setEmployeeData] = useState({
-  //   firstName: "",
-  //   lastName: "",
-  //   id: "",
-  //   mobileNo: "",
-  //   email: "",
-  //   dob: "",
-  //   joiningDate: "",
-  //   gender: "Male",
-  //   qualifications: "",
-  //   designation: "",
-  //   department: "",
-  //   bloodGroup: "A+",
-  //   address: "",
-  //   password: "",
-  //   role: "Admin",
-  // });
-
-  // const [clickAddEmploee,setAddEmploee] = useState(false)
-
-  // const [searchValue, setSearchValue] = useState("")
   const backendEndpoint = process.env.REACT_APP_BACKEND_ENDPOINT;
-
-
 
   useEffect(() => {
     fetchEmployees();
-    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const toggleIsPopupOpen = () =>{
-    setIsPopupOpen(false)
-  }
+  const toggleIsPopupOpen = () => {
+    setIsPopupOpen(false);
+  };
 
   const UpdateEmpAdded = () => {
-    setEmployeeAdded(true)
-  }
-
- 
-
-  // const openPopup = () => {
-  //   setIsPopupOpen(true);
-  //   setIsProfileCLickPopup(false);
-  // };
+    setEmployeeAdded(true);
+  };
 
   const closePopup = () => {
     setIsPopupOpen(false);
@@ -132,326 +87,6 @@ const AllEmployees = (props) => {
       setEmployeeAdded(false);
     }, 2000);
   };
-
-  // on submit add employee form
-  // const handleAddEmployeeForm = async (e) => {
-  //   const {
-  //     firstName,
-  //     lastName,
-  //     id,
-  //     mobileNo,
-  //     email,
-  //     dob,
-  //     joiningDate,
-  //     qualifications,
-  //     designation,
-  //     department,
-  //     address,
-  //     bloodGroup,
-  //     gender,
-  //     role,
-  //     password,
-  //   } = employeeData;
-
-  //   e.preventDefault();
-
-  //   const options = {
-  //     method: "POST",
-  //     body: JSON.stringify({
-  //       first_name: firstName,
-  //       last_name: lastName,
-  //       id: id,
-  //       mobile_number: mobileNo,
-  //       email: email,
-  //       date_of_birth: dob,
-  //       joining_date: joiningDate,
-  //       qualifications: qualifications,
-  //       designation: designation,
-  //       department: department,
-  //       address: address,
-  //       blood_group: bloodGroup,
-  //       gender: gender,
-  //       password: password,
-  //       role: role,
-  //     }),
-  //   };
-
-  //   console.log({
-  //     first_name: firstName,
-  //     last_name: lastName,
-  //     id: id,
-  //     mobile_number: mobileNo,
-  //     email: email,
-  //     date_of_birth: dob,
-  //     joining_date: joiningDate,
-  //     qualifications: qualifications,
-  //     designation: designation,
-  //     department: department,
-  //     address: address,
-  //     blood_group: bloodGroup,
-  //     gender: gender,
-  //     password: password,
-  //     role: role,
-  //   });
-
-  //   const response = await fetch(`${backendEndpoint}/create_employee`, options);
-  //   console.log(response,"response on form submittion")
-
-  //   if (response.status === 200) {
-  //     setIsPopupOpen(false);
-  //     setEmployeeAdded(true);
-  //     hideNotification();
-  //     fetchEmployees();
-  //   } else {
-  //     const data = await response.json();
-  //     setInvalidError(data.detail);
-  //   }
-  // };
-
-  // const onChangeInputs = (e) => {
-  //   setEmployeeData({
-  //     ...employeeData,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
-
-  // const onClickProfile = () => {
-  //   setIsProfileCLickPopup((prevState) => !prevState);
-  //   console.log("profile Clicked");
-  // };
-
-  
-
-  // add employee form
-  // const popupForm = () => (
-  //   <form className="form-group" onSubmit={handleAddEmployeeForm}>
-  //     <div className="d-flex justify-content-end m-0">
-  //       <button className="close-button" onClick={closePopup}>
-  //         <BsX className="close-icon" />
-  //       </button>
-  //     </div>
-
-  //     <h3 className="mb-3">Add Employee</h3>
-  //     <div className="add-employee-form-container">
-  //       <div className="input-element-container">
-  //         <p className="labels">First Name*</p>
-  //         <input
-  //           required
-  //           type="text"
-  //           className="input"
-  //           name="firstName"
-  //           onChange={onChangeInputs}
-  //         />
-  //       </div>
-
-  //       <div className="input-element-container">
-  //         <p className="labels">Last Name*</p>
-  //         <input
-  //           required
-  //           type="text"
-  //           className="input"
-  //           name="lastName"
-  //           onChange={onChangeInputs}
-  //         />
-  //       </div>
-
-  //       <div className="input-element-container">
-  //         <p className="labels">ID*</p>
-  //         <input
-  //           // readOnly
-  //           required
-  //           type="text"
-  //           className="input"
-  //           name="id"
-  //           onChange={onChangeInputs}
-  //         />
-  //       </div>
-
-  //       <div className="input-element-container">
-  //         <p className="labels"> Email*</p>
-  //         <input
-  //           required
-  //           type="text"
-  //           className="input"
-  //           name="email"
-  //           onChange={onChangeInputs}
-  //         />
-  //       </div>
-
-  //       <div className="input-element-container">
-  //         <p className="labels"> Role*</p>
-  //         <select
-  //           name="role"
-  //           onChange={onChangeInputs}
-  //           className="select-element"
-  //         >
-  //           <option value="Admin">Admin</option>
-  //           <option value="Employee">Employee</option>
-  //         </select>
-  //       </div>
-
-  //       <div className="input-element-container justify-content-space-between">
-  //         <div className="d-flex align-items-center justify-content-between">
-  //           <p className="labels">Password*</p>
-  //           <CopyToClipboard text={employeeData.password}>
-  //             <span>
-  //               <HiOutlineClipboardCopy className="copy-icon" />
-  //             </span>
-  //           </CopyToClipboard>
-  //         </div>
-
-  //         <input
-  //           required
-  //           type="text"
-  //           className="input"
-  //           name="password"
-  //           onChange={onChangeInputs}
-  //         />
-  //       </div>
-
-  //       <div className="input-element-container">
-  //         <p className="labels">Date of Birth*</p>
-  //         <input
-  //           required
-  //           type="date"
-  //           className="dateElement"
-  //           name="dob"
-  //           onChange={onChangeInputs}
-  //         />
-  //       </div>
-
-  //       <div className="input-element-container">
-  //         <p className="labels">Joining Date*</p>
-  //         <input
-  //           required
-  //           type="date"
-  //           className="dateElement"
-  //           name="joiningDate"
-  //           onChange={onChangeInputs}
-  //         />
-  //       </div>
-
-  //       <div className="input-element-container">
-  //         <p className="labels">Qualifications*</p>
-  //         <input
-  //           required
-  //           type="text"
-  //           className="input"
-  //           name="qualifications"
-  //           onChange={onChangeInputs}
-  //         />
-  //       </div>
-
-  //       <div className="input-element-container">
-  //         <p className="labels">Department*</p>
-  //         <input
-  //           required
-  //           type="text"
-  //           className="input"
-  //           name="department"
-  //           onChange={onChangeInputs}
-  //         />
-  //       </div>
-
-  //       <div className="input-element-container">
-  //         <p className="labels">Gender*</p>
-  //         {/* <input type="input" className="input" name='gender' onChange={onChangeInputs} /> */}
-
-  //         <select
-  //           className="select-element"
-  //           name="gender"
-  //           onChange={onChangeInputs}
-  //         >
-  //           <option value="Male">Male</option>
-  //           <option value="Female">Female</option>
-  //         </select>
-  //       </div>
-
-  //       <div className="input-element-container">
-  //         <p className="labels">Mobile No*</p>
-  //         <input
-  //           required
-  //           type="tel"
-  //           className="input"
-  //           name="mobileNo"
-  //           onChange={onChangeInputs}
-  //           maxLength="10"
-  //           pattern="[0-9]{10}"
-  //         />
-  //       </div>
-
-  //       <div className="input-element-container">
-  //         <p className="labels" htmlFor="address">
-  //           Blood Group*
-  //         </p>
-
-  //         <select
-  //           className="select-element"
-  //           name="bloodGroup"
-  //           onChange={onChangeInputs}
-  //         >
-  //           <option className="option-bg" value="A+">
-  //             A+
-  //           </option>
-  //           <option value="B+">B+</option>
-  //           <option value="AB+">AB+</option>
-  //           <option value="O+">O+</option>
-  //           <option value="A-">A-</option>
-  //           <option value="B-">B-</option>
-  //           <option value="AB-">AB-</option>
-  //           <option value="O-">O-</option>
-  //         </select>
-  //       </div>
-
-  //       <div className="input-element-container">
-  //         <p className="labels" htmlFor="designation">
-  //           Designation*
-  //         </p>
-  //         <input
-  //           required
-  //           type="text"
-  //           className="input"
-  //           name="designation"
-  //           onChange={onChangeInputs}
-  //         />
-  //       </div>
-
-  //       <div>
-  //         <p className="labels">Location*</p>
-  //         <input
-  //           required
-  //           type="text"
-  //           className="input"
-  //           name="address"
-  //           onChange={onChangeInputs}
-  //         />
-  //       </div>
-  //     </div>
-
-  //     {inValidDataErrorMsg.length > 0 && (
-  //       <p className="add-emp-invalid">*{inValidDataErrorMsg}</p>
-  //     )}
-
-  //     <button type="submit" className="mt-3 submit-btn">
-  //       Submit
-  //     </button>
-  //   </form>
-  // );
-
-  // popup on clicking profile icon
-  // const profilePopup = () => {
-  //   return (
-  //     <div>
-  //       <Link to="/employee">
-  //         <p className="mb-0">Your Profile</p>
-  //       </Link>
-
-  //       <button className="logout-btn mt-0" onClick={onClickLogout}>
-  //         Logout
-  //       </button>
-  //     </div>
-  //   );
-  // };
 
   const noDataDisplay = () => (
     <div className="d-flex flex-column justify-content-center align-items-center">
@@ -538,8 +173,8 @@ const AllEmployees = (props) => {
   const paginationPageSize = 10;
 
   const onClickAddEmployee = () => {
-    setIsPopupOpen(true)
-  }
+    setIsPopupOpen(true);
+  };
 
   const renderTable = () => (
     <div
@@ -552,7 +187,13 @@ const AllEmployees = (props) => {
       }}
     >
       <h3 className="text-center mb-3 ">All Employees</h3>
-      <button type="button" className="add-employee-btn" onClick={onClickAddEmployee}>Add Employee</button>
+      <button
+        type="button"
+        className="add-employee-btn"
+        onClick={onClickAddEmployee}
+      >
+        Add Employee
+      </button>
       <AgGridReact
         title="All Employees"
         columnDefs={columnDefs}
@@ -587,44 +228,35 @@ const AllEmployees = (props) => {
 
   return (
     <>
-    <Header/>
-     <div className="d-flex flex-column  mt-0 all-employees-container">
-      <div className="d-flex ">
-        <LeftNavBar />
-        <div>{renderAllEmployeesPage()}</div>
-      </div>
+      <Header />
+      <div className="d-flex flex-column  mt-0 all-employees-container">
+        <div className="d-flex ">
+          <LeftNavBar />
+          <div>{renderAllEmployeesPage()}</div>
+        </div>
 
-      {/* <div id="addEmployeeForm">
         {isPopupOpen && (
-          <div className="popup-overlay">
-            <div className="popup-content">{popupForm()}</div>
-          </div>
+          <AddEmployeePopup
+            popupClose={closePopup}
+            fetchEmployees={fetchEmployees}
+            popupOpen={isPopupOpen}
+            hideNotification={hideNotification}
+            toggleIsPopupOpen={toggleIsPopupOpen}
+            UpdateEmpAdded={UpdateEmpAdded}
+          />
         )}
-      </div> */}
 
-      {isPopupOpen && <AddEmployeePopup popupClose={closePopup} fetchEmployees={fetchEmployees} popupOpen={isPopupOpen} hideNotification={hideNotification} toggleIsPopupOpen = {toggleIsPopupOpen} UpdateEmpAdded={UpdateEmpAdded}/>}
-
-      {/* <div id="optionsPopup">
-        {profileclicked && (
-          <div className="popup-overlay-profile d-flex justify-content-end">
-            <div className="popup-content-profile">{profilePopup()}</div>
-          </div>
-        )}
-      </div> */}
-
-      <div id="successfulNotificationPopup">
-        {employeeAdded && (
-          <div className="d-flex justify-content-center align-items-center popup-overlay-alert">
-            <div className="notification-alert d-flex justify-content-center align-items-center">
-              <p className="text-success">Employee Added Successfully!</p>
+        <div id="successfulNotificationPopup">
+          {employeeAdded && (
+            <div className="d-flex justify-content-center align-items-center popup-overlay-alert">
+              <div className="notification-alert d-flex justify-content-center align-items-center">
+                <p className="text-success">Employee Added Successfully!</p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
-    
     </>
-   
   );
 };
 

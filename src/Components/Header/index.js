@@ -1,6 +1,6 @@
 // import {withRouter} from "react-router-dom"
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+// import { useState } from "react";
+import { Link } from "react-router-dom";
 import { BsFillPersonPlusFill, BsFillPersonFill } from "react-icons/bs";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 // import HrContext from "../../HrContext/HrContext.js";
@@ -9,40 +9,33 @@ import { RiLogoutCircleRLine } from "react-icons/ri";
 // import Popup from "reactjs-popup";
 
 const Header = (props) => {
-  const [profileclicked, setIsProfileCLickPopup] = useState(false);
-  // const hist = () =>{
-  //     const {match} = this.props
-  //     console.log(match)
-  // }
+  // const [profileclicked, setIsProfileCLickPopup] = useState(false);
 
-//  const ContextData = useContext(HrContext)
-  
+  // const navigate = useNavigate();
 
-  const navigate = useNavigate();
+  // const onClickProfile = () => {
+  //   setIsProfileCLickPopup((prevState) => !prevState);
+  //   console.log("profile Clicked");
+  // };
 
-  const onClickProfile = () => {
-    setIsProfileCLickPopup((prevState) => !prevState);
-    console.log("profile Clicked");
-  };
+  // const onClickLogout = () => {
+  //   localStorage.removeItem("loginDetails");
+  //   navigate("/login");
+  // };
 
-  const onClickLogout = () => {
-    localStorage.removeItem("loginDetails");
-    navigate("/login");
-  };
-
-  const profilePopup = () => {
-    return (
-      <div className="">
-        <Link className="remove-underline" to="/employee">
-        <p className="mb-0">Your Profile</p>
-        </Link>
+  // const profilePopup = () => {
+  //   return (
+  //     <div className="">
+  //       <Link className="remove-underline" to="/employee">
+  //       <p className="mb-0">Your Profile</p>
+  //       </Link>
         
-        <button className="logout-btn mt-0" onClick={onClickLogout}>
-          Logout
-        </button>
-      </div>
-    );
-  };
+  //       <button className="logout-btn mt-0" onClick={onClickLogout}>
+  //         Logout
+  //       </button>
+  //     </div>
+  //   );
+  // };
 
   return (
     <nav className="header-container">
@@ -70,17 +63,18 @@ const Header = (props) => {
 
         {/* onClick={onClickProfile} */}
 
-        <button onClick={onClickProfile} className="profile-icon-container">
+        <button className="profile-icon-container">
           <BsFillPersonFill size="30px" color="white" />
         </button>
       </div>
-      <div id="optionsPopup">
+
+      {/* <div id="optionsPopup">
         {profileclicked && (
           <div className="popup-overlay-profile d-flex justify-content-end ">
             <div className="popup-content-profile">{profilePopup()}</div>
           </div>
         )}
-      </div>
+      </div> */}
     </nav>
   );
 };

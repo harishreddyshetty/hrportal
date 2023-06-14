@@ -1,18 +1,20 @@
 import { Link } from "react-router-dom";
-import Header from "../Header";
+import LeftNavBar from "../LeftNavBar"
+import Header from "../Header"
 
 import "./index.css";
 
 const HomeRoute = () => {
   const loginDetails = JSON.parse(localStorage.getItem("loginDetails"));
-  const roleDetails = loginDetails.details.role;
+  const roleDetails = loginDetails.details.response.role;
 
   return (
     <>
-      <Header />
-
-      <div className="d-flex main-container justify-content-center align-items-center ">
-        <div className="home-page-container">
+    <Header/>
+     <div className="d-flex">
+      <LeftNavBar/>
+      <div className="d-flex main-container justify-content-center align-items-center">
+        <div className="home-page-container ml-5">
           <div className="shadow details-container d-flex align-items-center justify-content-center">
             {roleDetails === "Admin" ? (
               <Link className="remove-underline" to="/allemployees">
@@ -38,7 +40,9 @@ const HomeRoute = () => {
           </div>
         </div>
       </div>
+    </div>
     </>
+   
   );
 };
 

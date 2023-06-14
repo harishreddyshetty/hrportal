@@ -93,3 +93,8 @@
   color:white;
   font-size: 16px;
 }
+
+.leaves-req-hist-container{
+  max-height: 95vh;
+  overflow-y: auto;
+}

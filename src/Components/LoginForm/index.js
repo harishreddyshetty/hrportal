@@ -10,10 +10,9 @@ const LoginForm = () => {
   const [passwordError, setPasswordError] = useState("");
   const [errMsg, setErrMsg] = useState(false);
   const [errMsgDisplay, setErrMsgDisplay] = useState("Something Went Wrong");
+  const backendEndpoint = process.env.REACT_APP_BACKEND_ENDPOINT;
 
   const navigate = useNavigate();
-
-  // const IsUserFound = localStorage.getItem("email")
 
   const handleEmailBlur = () => {
     if (email.trim() === "") {
@@ -44,8 +43,9 @@ const LoginForm = () => {
 
     if (email.trim() !== "" && password.trim() !== "") {
       try {
+        console.log(backendEndpoint)
         const response = await axios.post(
-          "http://192.168.0.158:8000/login",
+          `${backendEndpoint}/login`,
           {
             email,
             password,

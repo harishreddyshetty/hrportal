@@ -1,0 +1,77 @@
+.left-nav-bar {
+  padding-top: 100px;
+  height: 100vh;
+  background-color: aliceblue;
+  max-width: 300px;
+}
+
+.list {
+  height: 85%;
+  margin-left: 0px;
+  padding-left: 5px;
+  list-style-type: none;
+}
+
+.container {
+  padding-top: 150px;
+}
+
+.expand-menu{
+  width: 250px;
+}
+
+.collapse-menu{
+  width:60px;
+  overflow: hidden;
+}
+
+
+@media (max-width:767px){
+  .expand-menu{
+    width: 300px;
+  }
+  
+  .collapse-menu{
+    width:60px;
+    overflow: hidden;
+  }
+  
+}
+
+.hamburger-icon{
+  font-size: 30px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  color: blue;
+}
+
+
+.logout-container{
+  list-style-type: none;
+  padding: 0px 0px 0px 5px;
+}
+
+.logout-btn-nav{
+  background-color: transparent;
+  border: 0px none;
+  font-size: 16px;
+  width:200px;
+  color: blue;
+  text-align: left;
+  
+}
+
+.logout-btn-nav:hover{
+  color:white;
+}
+
+.logout-list-item{
+  margin-left: 0px;
+  padding-left: 0px;
+  color: blue;
+}
+
+.logout-list-item:hover{
+  background-color: #043c84;
+  color:white;
+}

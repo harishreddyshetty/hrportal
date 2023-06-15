@@ -2,15 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { Vortex } from "react-loader-spinner";
 import FailureView from "../FailureView";
 import LeftNavBar from "../LeftNavBar";
-import Header from "../Header"
+import Header from "../Header";
 import AddEmployeePopup from "../AddEmployeePopup";
-
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-
 import "./index.css";
-
 
 const apiStatusConstants = {
   initial: "INITIAL",
@@ -23,32 +20,21 @@ const AllEmployees = (props) => {
   const [employees, setEmployees] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial);
- 
   const [employeeAdded, setEmployeeAdded] = useState(false);
-
-  
   const backendEndpoint = process.env.REACT_APP_BACKEND_ENDPOINT;
-
- 
-
 
   useEffect(() => {
     fetchEmployees();
-    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const toggleIsPopupOpen = () =>{
-    setIsPopupOpen(false)
-  }
+  const toggleIsPopupOpen = () => {
+    setIsPopupOpen(false);
+  };
 
   const UpdateEmpAdded = () => {
-    setEmployeeAdded(true)
-  }
-
- 
-
- 
+    setEmployeeAdded(true);
+  };
 
   const closePopup = () => {
     setIsPopupOpen(false);
@@ -195,8 +181,8 @@ const AllEmployees = (props) => {
   const paginationPageSize = 10;
 
   const onClickAddEmployee = () => {
-    setIsPopupOpen(true)
-  }
+    setIsPopupOpen(true);
+  };
 
   const renderTable = () => (
     <div
@@ -209,7 +195,13 @@ const AllEmployees = (props) => {
       }}
     >
       <h3 className="text-center mb-3 ">All Employees</h3>
-      <button type="button" className="add-employee-btn" onClick={onClickAddEmployee}>Add Employee</button>
+      <button
+        type="button"
+        className="add-employee-btn"
+        onClick={onClickAddEmployee}
+      >
+        Add Employee
+      </button>
       <AgGridReact
         title="All Employees"
         columnDefs={columnDefs}
@@ -244,32 +236,35 @@ const AllEmployees = (props) => {
 
   return (
     <>
-    <Header/>
-     <div className="d-flex flex-column  mt-0 all-employees-container">
-      <div className="d-flex ">
-        <LeftNavBar />
-        <div>{renderAllEmployeesPage()}</div>
-      </div>
+      <Header />
+      <div className="d-flex flex-column  mt-0 all-employees-container">
+        <div className="d-flex ">
+          <LeftNavBar />
+          <div>{renderAllEmployeesPage()}</div>
+        </div>
 
-    
-
-      {isPopupOpen && <AddEmployeePopup popupClose={closePopup} fetchEmployees={fetchEmployees} popupOpen={isPopupOpen} hideNotification={hideNotification} toggleIsPopupOpen = {toggleIsPopupOpen} UpdateEmpAdded={UpdateEmpAdded}/>}
-
-     
-
-      <div id="successfulNotificationPopup">
-        {employeeAdded && (
-          <div className="d-flex justify-content-center align-items-center popup-overlay-alert">
-            <div className="notification-alert d-flex justify-content-center align-items-center">
-              <p className="text-success">Employee Added Successfully!</p>
-            </div>
-          </div>
+        {isPopupOpen && (
+          <AddEmployeePopup
+            popupClose={closePopup}
+            fetchEmployees={fetchEmployees}
+            popupOpen={isPopupOpen}
+            hideNotification={hideNotification}
+            toggleIsPopupOpen={toggleIsPopupOpen}
+            UpdateEmpAdded={UpdateEmpAdded}
+          />
         )}
+
+        <div id="successfulNotificationPopup">
+          {employeeAdded && (
+            <div className="d-flex justify-content-center align-items-center popup-overlay-alert">
+              <div className="notification-alert d-flex justify-content-center align-items-center">
+                <p className="text-success">Employee Added Successfully!</p>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-    
     </>
-   
   );
 };
 

@@ -1,8 +1,8 @@
 .leave-management-container {
-  background-color: aliceblue;
+  
   min-height: 100vh;
   max-height: 100%;
-  min-width: 100vw;
+  min-width:80vw;
   max-width: 100%;
 }
 .widget-card-container {
@@ -66,7 +66,7 @@
     padding: 20px;
     height: 600px;
     left: 5%;
-    right: 5%;
+    right: 0%;
     top: 20%;
     bottom: 5%;
     box-shadow: 4px 4px 18px rgba(0, 0, 0, 0.2);

@@ -13,11 +13,17 @@ const LeaveHistoryTable = ({leaveCancelled}) => {
 
   const handleButtonClick = async (params) => {
     // Handle button click for the row
+    const loginDetails=JSON.parse(localStorage.getItem("loginDetails"))
+    const jwtToken=loginDetails.details.jwtToken
     console.log(params);
     try{
-      const options={
-        method:"DELETE",
-      }
+      const options = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application-json",
+          Authorization: `bearer ${jwtToken}`,
+        },
+      };
     const response=await fetch(`${backendEndpoint}/delete_leave/${params}`,options)
     if(response.status===200){
       console.log(leaveCancelled)
@@ -41,9 +47,17 @@ const LeaveHistoryTable = ({leaveCancelled}) => {
     try {
       const loginDetails=JSON.parse(localStorage.getItem("loginDetails"))
       const id=loginDetails.details.response.id;
+      const jwtToken=loginDetails.details.jwt_token
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application-json",
+          Authorization: `bearer ${jwtToken}`,
+        },
+      };
       const response = await fetch(
         `${backendEndpoint}/leaves/${id}`
-      );
+      ,options);
       if (response.status === 200) {
         const data = await response.json();
         console.log(data)

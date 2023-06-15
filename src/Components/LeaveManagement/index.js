@@ -4,6 +4,8 @@ import LeaveHistoryTable from "../LeaveHistoryTable";
 import { BsX } from "react-icons/bs";
 import LoadingView from "../LoadingView";
 import FailureView from "../FailureView";
+import Header from "../Header";
+import LeftNavBar from "../LeftNavBar";
 import "./index.css";
 
 const apiStatusConstants = {
@@ -40,6 +42,8 @@ const LeaveManagement = () => {
   };
 
   useEffect(() => {
+    console.log("Leave management entered")
+
     fetchLeavesCount(); // eslint-disable-next-line
   }, [applyLeave, leaveCancel]);
 
@@ -49,7 +53,16 @@ const LeaveManagement = () => {
     try {
       const loginDetails = JSON.parse(localStorage.getItem("loginDetails"));
       const id = loginDetails.details.response.id;
-      const response = await fetch(`${backendEndpoint}/leaves_count/${id}`);
+      const jwtToken=loginDetails.details.jwt_token;
+      console.log(jwtToken)
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application-json",
+          Authorization: `bearer ${jwtToken}`,
+        },
+      };
+      const response = await fetch(`${backendEndpoint}/leaves_count/${id}`,options);
       if (response.status === 200) {
         setApiStatus(apiStatusConstants.success);
         const data = await response.json();
@@ -70,6 +83,11 @@ const LeaveManagement = () => {
   const leavesComponent = () => {
     const { usedLeaves, balanceLeaves, totalLeaves } = leavesData;
     return (
+      <>
+      <Header />
+      <div className="d-flex">
+      
+      <LeftNavBar />
       <div className="leave-management-container">
         <div className="widget-card-container">
           <div className="widget-card">
@@ -111,6 +129,8 @@ const LeaveManagement = () => {
           </div>
         </div>
       </div>
+      </div>
+      </>
     );
   };
   const renderData = () => {

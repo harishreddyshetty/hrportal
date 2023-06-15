@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import LoadingView from "../LoadingView";
 import "./index.css";
 import FailureView from "../FailureView";
-
+import Header from "../Header";
+import LeftNavBar from "../LeftNavBar";
 const apiStatusConstants = {
   initial: "INITIAL",
   success: "SUCCESS",
@@ -16,7 +17,7 @@ const Profile = () => {
   const backendEndpoint = process.env.REACT_APP_BACKEND_ENDPOINT;
 
   useEffect(() => {
-    fetchData();// eslint-disable-next-line 
+    fetchData(); // eslint-disable-next-line
   }, [backendEndpoint]);
 
   const fetchData = async () => {
@@ -24,6 +25,7 @@ const Profile = () => {
     try {
       const loginDetails = JSON.parse(localStorage.getItem("loginDetails"));
       const jwtToken = loginDetails.details.jwt_token;
+      const id=loginDetails.details.response.id
       const options = {
         method: "GET",
         headers: {
@@ -32,7 +34,7 @@ const Profile = () => {
         },
       };
       const response = await fetch(
-        `${backendEndpoint}/employee/OS003`,
+        `${backendEndpoint}/employee/${id}`,
         options
       );
       // console.log(response);
@@ -86,61 +88,67 @@ const Profile = () => {
       address,
     } = employeeData;
     return (
-      <div className="employee-container">
-        <div>
-        <p className="display-bold">
-          <span>NAME</span>
-          {`: ${firstName} ${lastName}`}
-        </p>
-        <p className="display-bold">
-          <span>EMPID</span>
-          {`: ${id}`}
-        </p>
-        <p className="display-bold">
-          <span>EMAIL</span>
-          {`: ${email}`}
-        </p>
-        <p className="display-bold">
-          <span>DEPARTMENT</span>
-          {`: ${department}`}
-        </p>
-        <p className="display-bold">
-          <span>QUALIFICATIONS</span>
-          {`: ${qualifications}`}
-        </p>
-        <p className="display-bold">
-          <span>DOB</span>
-          {`: ${dob}`}
-        </p>
-        <p className="display-bold">
-          <span>GENDER</span>
-          {`: ${gender}`}
-        </p>
-        <p className="display-bold">
-          <span>DESIGNATION</span>
-          {`: ${designation}`}
-        </p>
-        <p className="display-bold">
-          <span>BLOOD_GROUP</span>
-          {`: ${bloodGroup}`}
-        </p>
-        <p className="display-bold">
-          <span>JOININGDATE</span>
-          {`: ${joiningDate}`}
-        </p>
-        <p className="display-bold">
-          <span>DESIGNATION</span>
-          {`: ${designation}`}
-        </p>
-        <p className="display-bold">
-          <span>ADDRESS:</span>
-          {`: ${address}`}
-        </p>
-        {/* <button className="back-to-home " type="button">
+      <>
+        <Header />
+          <div className="d-flex">
+          <LeftNavBar />
+          <div className="employee-container">
+            <div>
+              <p className="display-bold">
+                <span>NAME</span>
+                {`: ${firstName} ${lastName}`}
+              </p>
+              <p className="display-bold">
+                <span>EMPID</span>
+                {`: ${id}`}
+              </p>
+              <p className="display-bold">
+                <span>EMAIL</span>
+                {`: ${email}`}
+              </p>
+              <p className="display-bold">
+                <span>DEPARTMENT</span>
+                {`: ${department}`}
+              </p>
+              <p className="display-bold">
+                <span>QUALIFICATIONS</span>
+                {`: ${qualifications}`}
+              </p>
+              <p className="display-bold">
+                <span>DOB</span>
+                {`: ${dob}`}
+              </p>
+              <p className="display-bold">
+                <span>GENDER</span>
+                {`: ${gender}`}
+              </p>
+              <p className="display-bold">
+                <span>DESIGNATION</span>
+                {`: ${designation}`}
+              </p>
+              <p className="display-bold">
+                <span>BLOOD_GROUP</span>
+                {`: ${bloodGroup}`}
+              </p>
+              <p className="display-bold">
+                <span>JOININGDATE</span>
+                {`: ${joiningDate}`}
+              </p>
+              <p className="display-bold">
+                <span>DESIGNATION</span>
+                {`: ${designation}`}
+              </p>
+              <p className="display-bold">
+                <span>ADDRESS:</span>
+                {`: ${address}`}
+              </p>
+              {/* <button className="back-to-home " type="button">
             Back to Home
           </button> */}
-      </div>
-      </div>
+            </div>
+          </div>
+          </div>
+      </>
     );
   };
 

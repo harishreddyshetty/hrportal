@@ -1,8 +1,9 @@
 .left-nav-bar {
-  padding-top: 100px;
+  
   height: 100vh;
   background-color: aliceblue;
   max-width: 300px;
+ 
 }
 
 .list {
@@ -26,15 +27,16 @@
 }
 
 
-@media (max-width:767px){
-  .expand-menu{
-    width: 300px;
-  }
-  
+@media (max-width:600px){
   .collapse-menu{
-    width:60px;
+    width: 60px;
     overflow: hidden;
   }
+  .expand-menu{
+    width: 60px;
+    overflow: hidden;
+  }
+ 
   
 }
 
@@ -43,6 +45,7 @@
   margin-bottom: 10px;
   cursor: pointer;
   color: blue;
+  margin-left: 200px;
 }
 
 
